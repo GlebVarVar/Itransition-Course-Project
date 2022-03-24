@@ -1,0 +1,23 @@
+{
+    "development": {
+      "username": "root",
+      "password": "Gleb270803",
+      "database": "itransitionsdb",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password": "Gleb270803",
+      "database": "itransitionsdb",
+      "host": "sql11.freesqldatabase.com",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "root",
+      "password": "Gleb270803",
+      "database": "itransitionsdb",
+      "host": "sql11.freesqldatabase.com",
+      "dialect": "mysql"
+    }
+  }

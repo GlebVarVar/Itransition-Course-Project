@@ -1,131 +1,332 @@
-import NavBar from "../Nav/NavBar"
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useContext } from "react";
+import {userContext, languageContext} from "../Contexts/Contexts";
 import { useNavigate } from "react-router-dom";
-import {userContext} from "../Contexts/Contexts";
-import { useContext } from "react";
-import SearchBar from "../forms/SearchBar";
-import { Spinner } from "react-bootstrap";
-
-import { InputGroup, DropdownButton, Dropdown, FormControl, Form, Container } from "react-bootstrap";
-
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
+import { InputGroup, DropdownButton, Dropdown, Toast, FormControl, Tabs, Tab, Form,Carousel, Container, FloatingLabel, Col, Row, ButtonGroup, Button } from "react-bootstrap";
+import NavBar from "../Nav/NavBar"
+import DropdownExampleMultipleSearchSelection from "../Search/Search";
+import {Image} from 'cloudinary-react';
+
+import { createPostApi } from "../../services/Api";
+
+import './Style/DragAndDrop.css'
+import './CreatePost.css'
 
 const CreatePost = () => {
 
   const navigate = useNavigate();
-  const context = useContext(userContext)  
+  const context = useContext(userContext);
+  const {language} = useContext(languageContext);
 
-  const [title, setTitle] = useState('');
-  const [postText, setPostText] = useState('');
-  const [category, setCategory] = useState('Choose category');
-  const [tags, setTags] = useState([]);
-  
+
   const [alltags, setAlltags] = useState([]);
 
-  const [dataDisplay, setDataDisplay] = useState([]);
+  const [tags, setTags] = useState([]); // Post tags
+  const [postText, setPostText] = useState(''); // PostText
+  const [title, setTitle] = useState(''); // title
+  const [Rating, setRating] = useState(''); // rating
+  const [category, setCategory] = useState(language.choosePostCategory); // category
 
-  const [error, serError] = useState(false);
 
+  const [errorCreate, setErrorCreate] = useState({
+    errorMessage: '',
+    error: false
+  });
+
+  const [PhotosToUpload, setPhotosToUpload] = useState([]); // photos to upload
+
+  const [photos, setPhotos] = useState([{
+    profileIng: 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg'
+  }]); // photos to display
+
+  const [ImageLinks, setImageLinks] = useState([]); // image links for db
+
+
+  // console.log(tags);
+
+  const getAllTags = async() => {
+    const options = await axios.get(`http://localhost:3001/api/tags/all`);
+    const listOfTags = options.data ;
+    setAlltags(listOfTags.map((tag, key) => {
+      return {key: key, text: tag.tag, value: tag.tag}
+  }));
+    
+  }
+  // console.log(ImageLinks);
+    
   useEffect(() => {
     if (!context) navigate(-1); 
+    
+    getAllTags();
+    
     return;
+    
   }, [context]);
 
-    const crPost = async (e) => {
-      e.preventDefault();
-      if (category === "Choose category") {
-        return 
-      }
-      const email = context.email;
-      await axios.post("http://localhost:3001/api/posts", {title, postText, email }).then((res) => {
-        console.log(res);
-      });
 
+    const createPost = async (e) => {
+      e.preventDefault();
+
+
+      if (category === language.choosePostCategory ) {
+        setErrorCreate({error: true, errorMessage: 'Please choose category'})
+      } else if(tags.length === 0) {
+        setErrorCreate({error: true, errorMessage: 'Please choose at least one tag'})
+      } else if(title.length === 0) {
+        setErrorCreate({error: true, errorMessage: 'Please enter a title'})
+      } else if(Rating == '') {
+        setErrorCreate({error: true, errorMessage: 'Please enter rating'})
+      } else {
+        const email = context.email;
+
+        
+
+        functionsAfterSubmit(email);
+        
+      }
+    }
+
+
+    const updateForm = () => {
       setTitle('');
-      setPostText('');
+        setPostText('');
+        
+        setRating('')
+        setCategory(language.choosePostCategory);
+
+        setImageLinks([]);
+        setPhotos([{
+          profileIng: 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg'
+        }]);
+        setPhotosToUpload([]);
+        setTags([]);
     }
-    
 
-    const search = async (e) => {
-      e.preventDefault();
-      const lisOFTags = await axios.get('http://localhost:3001/api/tags');
-      setAlltags(lisOFTags.data);
+    const functionsAfterSubmit = async (email) => {
+      const res = await createPostApi(title, postText, email, category );
+      const PostId = res.data;
+      console.log(tags);
 
-    }
+      await axios.post('http://localhost:3001/api/tags/', {tags, PostId});
+      await axios.post('http://localhost:3001/api/rating/', {Rating, email, PostId});
+      uploadImage(PostId);
+      
 
-    const findTag = (e) => {
-      const searchword = e.target.value;
-      if (searchword=== '')  {
-        setDataDisplay([...dataDisplay]);
-        console.log(dataDisplay);
-      }
-
-      const newFilter = alltags.filter((value) => {
-        return value.tag.toLowerCase().includes(searchword.toLowerCase());
+      const newAlltags = alltags.map((tag) => {
+        return tag.text
       });
-      setDataDisplay(newFilter);
 
-    } 
 
-    const addTagToPage = (e) => {
-      e.preventDefault();
-      setTags([...tags, e.target.innerText]);
+      console.log(tags, newAlltags);
+      tags.forEach((tag) => {
+        if(newAlltags.includes(tag)  !== true){
+          axios.post('http://localhost:3001/api/tags/all', {tag}).then((res) => console.log(res))
+        } 
+      });
+      
+
+
+      updateForm();
     }
 
-    const clear = () => {
-      setDataDisplay([]);
+    const uploadImage = async (PostId) => {
+      let mas = []
+      for (let i = 0; i < PhotosToUpload.length; i++) {
+        if (PhotosToUpload[i] !==undefined) {
+          const formData = new FormData();
+          formData.append('file', PhotosToUpload[i]);
+          formData.append('upload_preset', 'kiqfxzx7');
+          const res = await axios.post('https://api.cloudinary.com/v1_1/dh3b8rkyd/image/upload', formData);
+           mas.push(res.data.url);
+        } else {
+          
+        }
+        
+      }
+      
+      console.log(mas);
+      setImageLinks(mas);
+      await axios.post('http://localhost:3001/api/photos/', {PostId, mas});
+    }
+
+
+
+    const imageHandler =  async (e) => {
+      const reader = new FileReader();
+      for (const item of e.target.files) {
+        reader.readAsDataURL(item);
+        reader.onload = async () => {
+          if (reader.readyState === 2) {
+            if(photos[0].profileIng === 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg') {
+              setPhotos([{profileIng: reader.result}]);
+            } else {
+              setPhotos([...photos, {profileIng: reader.result}]);
+            }
+            
+          }
+        }
+      }
+      
+
+      
+      
+      
     }
 
     return (
-      <div >
+        <>
         <NavBar/>
-        <InputGroup className="mb-3">
-          <DropdownButton
-            variant="outline-secondary"
-            title={category}
-            id="input-group-dropdown-1"
-          >
-            <Dropdown.Item onClick={() => setCategory('Films')}>Films</Dropdown.Item>
-            <Dropdown.Item onClick={() => setCategory('Books')}>Books</Dropdown.Item>
-            <Dropdown.Item onClick={() => setCategory('Games')}>Games</Dropdown.Item>
-          </DropdownButton>
-        </InputGroup>
-        <Container style={{width: "10%", float: 'right', margin: '100px 100px 0px 0px'}}> 
-          <Form className="justify-content-" onClick={(e) => search(e)}>
-            <FormControl
-            onChange={(e) => findTag(e)}
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-            />
-                
-          </Form>
-        </Container>
-        {dataDisplay.length != 0 ? (
-        <div className="dataResult" style={{width: "10%", float: 'right'}}>
-          {dataDisplay.slice(0, 15).map((value, key) => {
-            return (
-              <button className="dataItem" onClick={(e) => addTagToPage(e)} target="_blank" key={key}>
-                {value.tag}
-              </button>
-            );
-          })}
-        </div> 
-      ): ""}
-      
-        {
-          tags.map((tag, key) => {
-            return <p key={key} >{tag}</p>
-          })
-        }
-        <div>CreatePost</div>
+        <div  style={{padding: "5% 5% 0 5%"}}>
+
+          <Row>
+            <Col md={6} className="mb-2">
+              <Toast show={errorCreate.error} onClose={() => setErrorCreate({error: !errorCreate.error})}>
+                <Toast.Header>
+                  <img
+                    src="holder.js/20x20?text=%20"
+                    className="rounded me-2"
+                    alt=""
+                  />
+                  <strong className="me-auto">Itransitions</strong>
+                </Toast.Header>
+                <Toast.Body>{errorCreate.errorMessage}</Toast.Body>
+              </Toast>
+            </Col>
+          </Row> 
         
-        <input value={title}  onChange={(e) => setTitle(e.target.value)} placeholder="title"/>
-        <input value={postText} onChange={(e) => setPostText(e.target.value)} placeholder="postText"/>
-        <button onClick={(e) =>  crPost(e)}> Submit</button>
-      </div>
+        <Container>
+        
+          <Row>
+
+            <Col>
+              <InputGroup className="mb-3">
+                <DropdownButton
+                  variant="outline-primary"
+                  title={category}
+                  id="input-group-dropdown-1"
+                >
+                  <Dropdown.Item onClick={() => {
+                    setCategory('Films');
+                    getAllTags();
+                  }}>Films</Dropdown.Item>
+                  <Dropdown.Item onClick={() => {
+                    setCategory('Books');
+                    getAllTags();
+                  }}>Books</Dropdown.Item>
+                  <Dropdown.Item onClick={() => {
+                    setCategory('Games');
+                    getAllTags();
+                  }}>Games</Dropdown.Item>
+                </DropdownButton>
+              </InputGroup>
+            </Col>
+
+            <Col xs={6} md={4}>
+            {
+              category !== 'Choose category' ? category !=='Выбор категории'? <DropdownExampleMultipleSearchSelection alltags={alltags} setTags={setTags} tags={tags}/> : '' : ''
+            }
+              
+            </Col>
+            
+          </Row>
+
+          <Row>
+            <Col >
+              <Row className="g-2">
+                <Col md>
+                  <FloatingLabel controlId="floatingInputGrid" label="Title">
+                    <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} placeholder="Iron Man" />
+                  </FloatingLabel>
+                </Col>
+                <Col md>
+                  <FloatingLabel controlId="floatingSelectGrid" label="Rating">
+                    <Form.Select aria-label="Floating label select example" value={Rating} onChange={(e) => setRating(e.target.value)}>
+                      <option>Open this select menu</option>
+                      <option value="5">5 - Awesome!</option>
+                      <option value="4">4 - Great!</option>
+                      <option value="3">3 - Okay</option>
+                      <option value="2">2 - bad</option>
+                      <option value="1">1 - horrible</option>
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+              </Row>
+              <Row>
+                <Carousel>
+                  {
+                    photos.map((photo, key) => {
+                      return (
+                        <Carousel.Item key={key}>
+                          <img
+                            className="d-block w-100"
+                            src={photo.profileIng}
+                            alt="First slide"
+                          />
+                        </Carousel.Item>
+                      )
+                    })
+                  }
+                </Carousel>
+              </Row>
+                  
+              <Row>
+
+              </Row>
+              <Row>
+                <Form.Group controlId="formFileMultiple" className="mb-3">
+                  <Form.Label>Upload your photos(10 Max)!</Form.Label>
+                  <Form.Control onChange={(e) => {
+                    if (PhotosToUpload.length != 10) {
+                      imageHandler(e);
+                      if (PhotosToUpload.length !== 0) {
+                        setPhotosToUpload([...PhotosToUpload, e.target.files[0]])
+                      } else {
+                        setPhotosToUpload([e.target.files[0]])
+                      }
+                    }
+                    
+                    
+                    // console.log(PhotosToUpload);
+
+                  }} type="file" />
+                  <Button onClick={createPost}>Submit</Button>
+                </Form.Group>
+              </Row>
+              <Row>
+
+              </Row>
+            </Col>
+            
+
+
+            <Col>
+              <Row>
+                <Tabs defaultActiveKey="Edit" id="uncontrolled-tab-example" className="mb-3">
+                  <Tab eventKey="Edit" title="Edit">
+                    <FloatingLabel controlId="floatingTextarea2" label="Your text here">
+                      <Form.Control
+                      value={postText}
+                      onChange={(e) => setPostText(e.target.value)}
+                        as="textarea"
+                        placeholder="Leave a comment here"
+                        style={{ height: '100px' }}
+                      />
+                    </FloatingLabel>
+                  </Tab>
+                  <Tab eventKey="Preview" title="Preview">
+                  <ReactMarkdown>{postText}</ReactMarkdown>
+                  </Tab>
+                </Tabs>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+        
+        </div>
+      </>
     )
 }
 

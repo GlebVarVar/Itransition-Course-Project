@@ -6,7 +6,7 @@ const findUser = async (req, res, next) => {
       });
 
     
-    // console.log(useId);
+    console.log(useId);
     req.username = useId[0].dataValues.username;
     req.id = useId[0].dataValues.id;
     next();

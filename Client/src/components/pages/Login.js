@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import {auth, login, logout,  googleLogin} from '../../services/firebase'
+import { useState, useEffect, useContext } from "react";
+import {userContext, languageContext} from '../Contexts/Contexts';
+import {auth, login, googleLogin} from '../../services/firebase'
 import { useNavigate, Link } from "react-router-dom";
 
-import { Form, Button, Container } from "react-bootstrap";
-import { useContext } from 'react';
-import {userContext} from '../Contexts/Contexts';
-
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import NavBar from "../Nav/NavBar";
 
-import 'firebase/auth';
+
+import './Style/Login.css'
+
 
 function App() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -19,11 +18,9 @@ function App() {
     error: false
   });
 
-  // const [user, loading, error] = useAuthState(auth);
-
   const navigate = useNavigate();
 
-
+  const {language} = useContext(languageContext);
   const context = useContext(userContext)  
   
   useEffect(() => {
@@ -55,42 +52,60 @@ function App() {
   return (
     <>
       <NavBar/>
-      <Container>
-        <Form>
+      <div className="d-flex align-items-center justify-content-center" style={{height: '500px'}}>
+        
+       <Form className="rounded p-4 p-sm-3">
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" onChange={(e) => setLoginEmail(e.target.value)}/>
+            <Form.Label>{language.email}</Form.Label>
+            <Form.Control type="email" placeholder={language.enterEmail} onChange={(e) => setLoginEmail(e.target.value)}/>
             <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
+              {language.privacy}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}/>
+            <Form.Label>{language.password}</Form.Label>
+            <Form.Control type="password" placeholder={language.password} onChange={(e) => setLoginPassword(e.target.value)}/>
+
             {
               errorLogin.error ? 
               <Form.Text style={{ color: "red" }}>
                 {errorLogin.errorMessage}
               </Form.Text> : ""
             }
-          </Form.Group>
+          </Form.Group >
+
+
+          <Form.Group className="mb-3">
+            <Row>
+              <Col>
+                <Button variant="primary" onClick={loginFirebase}>
+                  {language.login}
+                </Button>
+              </Col>
+              <Col>
+                <Button variant="primary"  onClick={() => googleLogin(auth)}>
+                {language.loginGoogle} 
+                </Button>
+              </Col>
+            </Row>
+            </Form.Group >
+
+
+
+            <Form.Group className="mb-3">
+              <Button>
+                <Link style={{color: 'white'}} to="/registration">{language.signup}</Link>
+              </Button>
+            </Form.Group>
           
-          <Container>
-            <Button variant="primary" onClick={loginFirebase}>
-              Login
-            </Button>
-            <Button variant="primary"  onClick={() => googleLogin(auth)}>
-              Login with Google
-            </Button>
-            <Form.Text>
-              <Link to="/registration">Sign up!</Link>
-            </Form.Text>
-          </Container>
+          
+            
+
         </Form>
-      </Container>
+      </div>
+      
     </>
-    
   );
 }
 

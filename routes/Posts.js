@@ -31,7 +31,11 @@ router.post("/", findUser, async (req, res) => {
   info.username = req.username;
   info.UserId = req.id;
   await Posts.create(info);
-  res.json(info);
+  const lastRecord = await Posts.max('id',
+    {where: {UserId: info.UserId}});
+  
+  
+  res.json(lastRecord);
 });
 
 // router.put("/title", async (req, res) => {

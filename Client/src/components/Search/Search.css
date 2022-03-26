@@ -1,0 +1,13 @@
+@import url(https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css);
+
+.ui.selection.active.dropdown .menu  {
+    border-color: #0d6efd;
+    -webkit-box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
+    box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
+}
+
+.ui.selection.active.dropdown .menu:hover {
+    border-color: #0d6efd;
+    -webkit-box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
+    box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
+}

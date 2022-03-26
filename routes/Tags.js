@@ -1,13 +1,28 @@
-const {Alltags} = require("../models")
+const {Alltags, Tags} = require("../models")
 const express = require('express')
 const router = express.Router()
 
 
-router.get("/",  async (req, res) => {
+router.get("/all",  async (req, res) => {
     const listOftags = await Alltags.findAll();
-    console.log(listOftags);
     res.json(listOftags);
     
+});
+
+
+
+router.post("/all",  async (req, res) => {
+    const {tag} = req.body;
+    await Alltags.create({tag: tag});
+    res.json('success');
+});
+
+router.post("/",  async (req, res) => {
+    const {tags, PostId} = req.body;
+    tags.forEach(async (tag)  => {
+        await Tags.create({tag, PostId});
+    })
+    res.json('success');
 });
 
 // router.post("/", async (req, res) => {

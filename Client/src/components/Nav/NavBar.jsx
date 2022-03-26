@@ -24,6 +24,7 @@ const NavBar = () => {
 
     const goToProfile = (e) => {
         e.preventDefault();
+        console.log(context);
         navigate(`/profile/${context.uid}`);
     }
 
@@ -83,7 +84,7 @@ const NavBar = () => {
                 <Form className="justify-content-">
                     <FormControl
                     type="search"
-                    placeholder="Search"
+                    placeholder={language.search}
                     className="me-2"
                     aria-label="Search"
                     />
@@ -92,7 +93,7 @@ const NavBar = () => {
                 
                 <Nav.Link onClick={(e) => goToProfile(e)} > {context?.email}</Nav.Link>
                 {
-                    context? <Button variant="outline-danger" onClick={(e) => logout(e)} >Logout</Button> : <Button variant="outline-success"  onClick={(e) => goToLogin(e)} >Login</Button>
+                    context? <Button variant="outline-danger" onClick={(e) => logout(e)} >{language.logout}</Button> : <Button variant="outline-success"  onClick={(e) => goToLogin(e)} >{language.login}</Button>
                 }
                 </Navbar.Collapse>
             </Container>

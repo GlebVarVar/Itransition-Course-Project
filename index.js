@@ -15,12 +15,16 @@ app.use("/api/posts", postRouter);
 const commentsRouter = require('./routes/Comments');
 app.use("/api/comments", commentsRouter);
 const usersRouter = require('./routes/Users');
-app.use("/api/registration", usersRouter);
+app.use("/api/users", usersRouter);
+const photosRouter = require('./routes/Photos');
+app.use("/api/photos", photosRouter);
 
 // const likesRouter = require('./routes/Likes');
 // app.use("/likes", likesRouter);
 const tagsRouter = require('./routes/Tags');
 app.use("/api/tags", tagsRouter);
+const ratingRouter = require('./routes/Rating');
+app.use("/api/rating", ratingRouter);
 
 db.sequelize
     .sync().

@@ -1,17 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { Users } = require("../models");
+const { Users, Posts, Likes, Ratings } = require("../models");
 const {findUserIn} = require('../middleware/auth')
 // const bcrypt = require("bcryptjs");
 // const { validateToken } = require("../middlewares/AuthMiddleware");
 // const { sign } = require("jsonwebtoken");
 
-router.post("/", findUserIn, async (req, res) => {
+router.post("/registration", findUserIn, async (req, res) => {
   const { email, username } = req.body;
 
   await Users.create({
     username: username,
     email: email,
+    userType: 'member'
   });
   res.json("SUCCESS");
 });
@@ -47,6 +48,17 @@ router.post("/", findUserIn, async (req, res) => {
 
 //   res.json(basicInfo);
 // });
+
+router.get("/admin", async (req, res) => {
+  const email = req.header("email");
+  const basicInfo = await Users.findOne({ where: { email: email } });
+  res.json(basicInfo);
+});
+
+router.get("/", async (req, res) => {
+  const basicInfo = await Users.findAll({ include: [Posts, Likes, Ratings] });
+  res.json(basicInfo);
+});
 
 // router.put("/changepassword", validateToken, async (req, res) => {
 //   const { oldPassword, newPassword } = req.body;

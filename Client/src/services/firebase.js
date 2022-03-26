@@ -55,7 +55,7 @@ const googleLogin = async (auth) => {
   try {
     const result = await signInWithPopup(auth, provider);
     
-    await axios.post("http://localhost:3001/api/registration", {email: result.user.email, username: result.user.displayName })
+    await axios.post("http://localhost:3001/api/users/registration", {email: result.user.email, username: result.user.displayName })
     console.log(result.user);
   } catch (error) {
     return error.message

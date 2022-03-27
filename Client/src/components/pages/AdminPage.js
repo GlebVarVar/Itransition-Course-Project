@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Accordion, Container, Table } from "react-bootstrap";
+import { Accordion, Container, Table, Button, Col, Row } from "react-bootstrap";
 
 const AdminPage = () => {
   const context = useContext(userContext);
@@ -60,68 +60,80 @@ const AdminPage = () => {
     console.log(responce.data);
   } 
 
+  const AdminTable = () => {
+
+    
+
+    return (
+      <Accordion defaultActiveKey={['0']} alwaysOpen>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Accordion Item #1</Accordion.Header>
+          <Accordion.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td colSpan={2}>Larry the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </Table>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>Accordion Item #2</Accordion.Header>
+          <Accordion.Body>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+    )
+  }
+
+
+
   return (
-
-    <div>
+    <>
       <NavBar/>
-      <Container>
-        {
-
-        }
-        <Accordion defaultActiveKey={['0']} alwaysOpen>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>Accordion Item #1</Accordion.Header>
-            <Accordion.Body>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td colSpan={2}>Larry the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-              </tbody>
-            </Table>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="1">
-            <Accordion.Header>Accordion Item #2</Accordion.Header>
-            <Accordion.Body>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      </Container>
-
-
-
-
-
-      {
-        table(admin)
-      }
-      <button onClick={verifyAdmin}> Verify admin</button>
-      
-    </div>
+      <div  style={{padding: "5% 5% 0 5%"}}>
+        <Row className="justify-content-md-center">
+          {
+            !admin &&  
+            <Col md="auto">
+              <Button size="lg" onClick={verifyAdmin}>Verify admin </Button>
+            </Col> 
+          }
+          
+        </Row>
+        <Row>
+          <Container>
+            {
+              admin &&  AdminTable() 
+            }
+          </Container>
+        </Row>     
+      </div>
+    </>
   )
 }
 

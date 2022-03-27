@@ -93,7 +93,9 @@ const NavBar = () => {
                 
                 <Nav.Link onClick={(e) => goToProfile(e)} > {context?.email}</Nav.Link>
                 {
-                    context? <Button variant="outline-danger" onClick={(e) => logout(e)} >{language.logout}</Button> : <Button variant="outline-success"  onClick={(e) => goToLogin(e)} >{language.login}</Button>
+                    context? <Button variant="outline-danger" onClick={(e) => {
+                        logout(e)
+                    }} >{language.logout}</Button> : <Button variant="outline-success"  onClick={(e) => goToLogin(e)} >{language.login}</Button>
                 }
                 </Navbar.Collapse>
             </Container>

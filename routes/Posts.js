@@ -1,19 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const { Posts, Likes } = require("../models");
+const { Posts, Likes, Ratings, Tags, Photos } = require("../models");
 
 
 const { findUser } = require("../middleware/auth");
 
 router.get("/", async (req, res) => {
-  const listOfPosts = await Posts.findAll({ include: [Likes] });
-  // const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
-  res.json({ listOfPosts: listOfPosts });
+  const countOfPosts = await Posts.count();
+  const displayPosts = req.headers.countofdisplay;
+  if (displayPosts > countOfPosts) {
+    const listOfPosts = await Posts.findAll({ include: [Likes, Ratings, Tags, Photos] });
+    // const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+    listOfPosts.reverse();
+    res.json({addition: false, listOfPosts: listOfPosts  })
+  } else {
+    const listOfPosts = await Posts.findAll({ limit: countOfPosts, offset: countOfPosts - displayPosts, include: [Likes, Ratings, Tags, Photos] });
+    // const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+    listOfPosts.reverse();
+    res.json({ listOfPosts: listOfPosts });
+  }
+  
 });
 
 router.get("/:postId", async (req, res) => {
   const id = req.params.postId;
-  const post = await Posts.findByPk(id);
+  console.log(id);
+  const post = await Posts.findByPk(id, { include: [Likes, Ratings, Tags, Photos] });
   res.json(post);
 });
 

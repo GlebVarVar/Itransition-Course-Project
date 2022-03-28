@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import './Stars.css'
+import { userContext } from "../Contexts/Contexts";
+
+import { postRatingAPI } from "../../services/Rating";
 
 const StarRating = (props) => {
-    const {rating, setRating} = props;
+    const {userRating, setUserRating} = props;
     const [hover, setHover] = useState(0);
-    
+    const context = useContext(userContext);
+    const addRanting = (postId, email, count) => {
+        postRatingAPI(postId, email, count);
+    }
+
 
     return (
         <div className="star-rating">
@@ -14,10 +21,14 @@ const StarRating = (props) => {
             <button
                 type="button"
                 key={index}
-                className={index <= (hover || rating) ? "on" : "off"}
-                onClick={() => setRating(index)}
+                className={index <= (hover || userRating) ? "on" : "off"}
+                onClick={(e) => {
+                    e.preventDefault();
+                    setUserRating(index);
+                    addRanting(props.postId ,context.email,  index);
+                }}
                 onMouseEnter={() => setHover(index)}
-                onMouseLeave={() => setHover(rating)}
+                onMouseLeave={() => setHover(userRating)}
             >
                 <span className="star">&#9733;</span>
             </button>
@@ -29,7 +40,7 @@ const StarRating = (props) => {
 
 const StarRatingStatic = (props) => {
     const {rating} = props;
-    console.log(rating);
+    // console.log(rating);
     
     return (
         <div className="star-rating">

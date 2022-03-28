@@ -1,33 +1,37 @@
-import { Link } from "react-router-dom";
-import NavBar from "../Nav/NavBar";
-import {userContext} from "../Contexts/Contexts";
-import { useNavigate } from "react-router-dom";
+import {userContext, languageContext} from "../Contexts/Contexts";
+import { useNavigate, Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-
-import axios from "axios";
-
-import { Row, Col, Card, Container, Badge, Button} from "react-bootstrap";
-
+// Utis
+import { ownerRating, totalRating } from "../utils/Functions";
+// Components
+import { Row, Col, Card, Container, Badge, Button, InputGroup,NavDropdown, DropdownButton, Dropdown} from "react-bootstrap";
+import NavBar from "../Nav/NavBar";
 import ReactMarkdown from "react-markdown";
-
-
 import {StarRating, StarRatingStatic} from "../Stars/Stars";
 
-const MainPage = () => {
-  const context = useContext(userContext) 
-  const navigate = useNavigate();
-  const [listOfPosts, setListOfPosts] = useState([]);
+// API
+import { getPostsAPI } from "../../services/Posts";
 
+
+const MainPage = () => {
+  const context = useContext(userContext); 
+  const {language} = useContext(languageContext);
+
+  const navigate = useNavigate();
+
+  const [listOfPosts, setListOfPosts] = useState([]);
+  const [dataDisplay, setDataDisplay] = useState([]);
   const [countOfDisplay, setCountOfDisplay] = useState(4);
   const [buttonDisplay, setButtonDisplay] = useState(true);
 
-  
+  const [filter, setFilter] = useState('new');
+
+  console.log(filter);
 
 
   useEffect(() => {
-    console.log(countOfDisplay);
-    axios.get("http://localhost:3001/api/posts", {headers: {countOfDisplay : countOfDisplay}}).then((responce) => {
-      console.log(responce);
+    getPostsAPI(countOfDisplay, filter).then((responce) => {
+      console.log(responce.data)
       if (responce.data.addition != false  ){
         setListOfPosts(responce.data.listOfPosts);
       } else {
@@ -37,37 +41,51 @@ const MainPage = () => {
       
     })
     
-  }, [countOfDisplay]);
+  }, [filter, countOfDisplay]);
   
-  // console.log(listOfPosts[0]);
-
-
-  // const AverageRating = (post) => {
-  //   let counter = 0;
-  //   const ratingCount = post.Ratings.map((rating) => {
-  //     if (rating.UserId ==! post.UserId) {
-  //       counter+= rating.Rating;
-  //       console.log(rating.Rating);
-  //       return rating.Rating;
-  //     }
-  //   })
-    
-  //   const res = ratingCount[0] === undefined? 'No rating exist' :  counter / ratingCount
-
-  //   return(
-  //     res
-  //   )
-    
-    
-  // }
 
   return (
-      <>
+    <>
       <NavBar/>
-        <div style={{padding: "5% 0 0 0"}}>
-          <Row></Row>
-          <Container >
-          {listOfPosts.length !== 0 ? 
+      <div style={{padding: "5% 0 0 0"}}>
+
+        <Container >
+          <Row style={{margin: '2% 0'}} >
+            <Col>
+              <InputGroup className="mb-3">
+                <DropdownButton
+                  variant="outline-primary"
+                  title='filters'
+                  drop='end'
+                  id="input-group-dropdown-1"
+                >
+                  <Dropdown.Item onClick={() => {
+                    setFilter('new');
+                  }}>Latests</Dropdown.Item>
+                  <Dropdown.Item onClick={() => {
+                    setFilter('Rating');
+                  }}>High rating</Dropdown.Item>
+                  <NavDropdown.Divider />
+                  <Dropdown.Item onClick={() => {
+                    setFilter('Films');
+                  }}>Films</Dropdown.Item>
+                  <Dropdown.Item onClick={() => {
+                    setFilter('Books');
+                  }}>Books</Dropdown.Item>
+                  <Dropdown.Item onClick={() => {
+                    setFilter('Games');
+                  }}>Games</Dropdown.Item>
+                </DropdownButton>
+              </InputGroup>
+            </Col>
+            <Col>
+            
+            </Col>
+          </Row>
+
+
+        
+        {listOfPosts.length !== 0 ? 
           <Row xs={1} md={2} className="g-4">
               {
                 listOfPosts.map((post, key) => {
@@ -79,51 +97,67 @@ const MainPage = () => {
                         }
                         <Card.Body>
                           <Row onClick={() => navigate(`/posts/${post.id}`)}>
-                            <Card.Title>{post.title}</Card.Title>
+                            <Col>
+                              <Card.Title>{post.title}</Card.Title>
+                            </Col>
+                            <Col >
+                              <Button variant="warning" onClick={(e) => {
+                                e.preventDefault();
+                                setFilter(post.category);
+                              }} style={{float: 'right'}}>{post.category}</Button>
+                            </Col>
                           </Row>
                           {/* <Card.Text>
                             
                           </Card.Text> */}
-                          <Row onClick={() => navigate(`/posts/${post.id}`)}>
-                            <ReactMarkdown>{post.postText}</ReactMarkdown>
+                          <Row style={{margin: '2% 0'}} onClick={() => navigate(`/posts/${post.id}`)}>
+                            <ReactMarkdown>{post.postText.length > 500 ? `${post.postText.substr(0, 500)}...` : post.postText}</ReactMarkdown>
                           </Row>
+
                           <Row onClick={() => navigate(`/posts/${post.id}`)}>
                             <div>
                               {
                                 post.Tags.map((tag, key) => {
                                   return (
-                                    <Badge style={{margin: '0 10px 0 10px'}} bg="primary" key={key}>{tag.tag}</Badge>
+                                    <Badge style={{margin: '0 10px 0 10px'}} bg="info" key={key}>{tag.tag}</Badge>
                                   )
                                 })
                               }
                             </div>
                           </Row>
-                          <Row onClick={() => navigate(`/posts/${post.id}`)}> 
-                            <Col>Likes</Col>
-                            <Col>User rating</Col>
-                            <Col>Author rating</Col>
+
+                          <Container>
+                            <Row xs={1} sm={1} lg={3} onClick={() => navigate(`/posts/${post.id}`)} className="text-center"  style={{fontWeight: "bold", margin: '2% 0'}}> 
+                              <Col>
+                                <Row><p>{language.likes}</p></Row>
+                                <Row><p>{post.Likes.length}</p></Row>
+                              </Col>
+
+                              <Col>
+                                <Row><p>{language.userRating}</p></Row>
+                                <Row>
+                                  {
+                                    <StarRatingStatic rating={totalRating(post)}/>
+                                  }
+                                </Row>
+                              </Col>
+
+                              <Col>
+                                <Row><p>{language.authorRating}</p></Row>
+                                <Row >
+                                  {
+                                    <StarRatingStatic rating={ownerRating(post)}/>
+                                  }
+                                </Row>
+                              </Col>
+                      
                             </Row>
-                            <Row>
-                              <Col>{post.Likes.length}</Col>
-                              <Col>
-                                {
-                                  // AverageRating(post)
-                                  <StarRatingStatic rating={post.Ratings.map(rate => rate.Rating).reduce((prev, curr) => prev + curr, 0) / post.Ratings.length}/>
-                                }
-                              </Col>
-                              <Col>
-                                {
-                                  <StarRatingStatic rating={post.Ratings.map((rate) => {
-                                    if (rate.PostId == post.id ) {
-                                      return rate
-                                    }
-                                  })[0].Rating
-                                  }/>
-                                }
-                              </Col>
-                          </Row>
+                          </Container>
                           <Row>
-                            <Link to={`/profile/${post.id}`}>{post.username} </Link>
+                            <Button onClick={(e) => {
+                              e.preventDefault();
+                              navigate(`/profile/${post.UserId}`)
+                            }}>{post.username} </Button>
                           </Row>
                         </Card.Body>
                       </Card>
@@ -132,41 +166,21 @@ const MainPage = () => {
                 })
               }
             </Row> : ''
+          }
+
+          <Row>
+            {
+              buttonDisplay == true ? 
+              <div className="d-grid gap-2" style={{marginTop: '5%'}} >
+                <Button variant="success"  size="lg" onClick={() => setCountOfDisplay(countOfDisplay + 4)}>
+                  {language.morePosts}
+                </Button>
+                </div> : ''
             }
-            <Row>
-              {
-                buttonDisplay == true ? 
-                <div className="d-grid gap-2">
-                  <Button variant="primary" size="lg" onClick={() => setCountOfDisplay(countOfDisplay + 4)}>
-                    More Posts!
-                  </Button>
-                 </div> : ''
-              }
-            </Row>
-          </Container>
-
-
-          {/* {
-          listOfPosts.map((value, key) => {
-            return (
-              <div className="post" key={key}>
-                <div className="title"> {value.title} </div>
-                <div className="body" onClick={() => {navigate(`/posts/${value.id}`)}}>{value.postText}</div>
-                <div className="footer">
-                  <div className="username"><Link to={`/profile/${value.UserId}`}>{value.username}</Link></div> */}
-                  {/* <div className="buttons">
-                    <ThumbUpAltIcon className={likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn"} onClick={() => likePost(value.id)}/>
-                  </div>
-                  <label>{value.Likes.length}</label> */}
-                {/* </div>
-              </div>
-            );
-          })
-          }  */}
-
-          
-        </div>
-      </>
+          </Row>
+        </Container>
+      </div>
+    </>
   )
 }
   

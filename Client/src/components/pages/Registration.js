@@ -2,25 +2,23 @@ import { useState, useEffect, useContext } from "react";
 import {userContext, languageContext} from "../Contexts/Contexts";
 import {auth, register} from '../../services/firebase'
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import NavBar from "../Nav/NavBar";
 import { Form, Row, Col, Button } from "react-bootstrap";
 
-
+import { postRegistraionAPI } from "../../services/Users";
 
 const Registration = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [username, setUsername] = useState('');
-
-  const context = useContext(userContext);
-  const {language} = useContext(languageContext)
-
   const [errorReg, setErrorReg] = useState({
     errorMessage: '',
     error: false
   });
+
+  const context = useContext(userContext);
+  const {language} = useContext(languageContext)
 
   const navigate = useNavigate();
 
@@ -42,16 +40,10 @@ const Registration = () => {
         ...errorReg,
         error: false
       });
-      console.log(context);
-      
-      
-      
-      await axios.post("http://localhost:3001/api/users/registration", {email: registerEmail, username: username })
+
+      await postRegistraionAPI(registerEmail, username)
       navigate('/');
-      
-      
     }
-    console.log(responce);
   }
 
 

@@ -10,7 +10,7 @@ import NavBar from "../Nav/NavBar"
 import DropdownExampleMultipleSearchSelection from "../Search/Search";
 import {Image} from 'cloudinary-react';
 
-import { createPostApi } from "../../services/Api";
+import { postCreatePostAPI } from "../../services/Posts";
 
 import './Style/DragAndDrop.css'
 import './CreatePost.css'
@@ -39,7 +39,7 @@ const CreatePost = () => {
   const [PhotosToUpload, setPhotosToUpload] = useState([]); // photos to upload
 
   const [photos, setPhotos] = useState([{
-    profileIng: 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg'
+    profileIng: 'https://crankwheel.com/uploads/2019/06/12/CW_How%20to%20deliver%20the%20perfect%20instant%20online%20product%20demo.jpg'
   }]); // photos to display
 
   const [ImageLinks, setImageLinks] = useState([]); // image links for db
@@ -106,7 +106,7 @@ const CreatePost = () => {
     }
 
     const functionsAfterSubmit = async (email) => {
-      const res = await createPostApi(title, postText, email, category );
+      const res = await postCreatePostAPI(title, postText, email, category );
       const PostId = res.data;
       console.log(tags);
 
@@ -233,7 +233,7 @@ const CreatePost = () => {
             
           </Row>
 
-          <Row>
+          <Row xs={1} sm={1} lg={2}>
             <Col >
               <Row className="g-2">
                 <Col md>
@@ -291,7 +291,9 @@ const CreatePost = () => {
                     
                     // console.log(PhotosToUpload);
 
-                  }} type="file" />
+                  }} 
+                    type="file"
+                    accept=".png,.jpg,.jpeg,.webp" />
                   <Button onClick={createPost}>Submit</Button>
                 </Form.Group>
               </Row>

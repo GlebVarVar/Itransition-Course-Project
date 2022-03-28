@@ -14,6 +14,10 @@ const englishLanguage = {
     languageDropdown: 'Russian language',
     adminPageDropdown: 'Admin Page',
     // login
+    errorLoginPassword: 'Wrong-password',
+    errorLogin: 'Invalid-email',
+    errorManyRequests: 'Too-many-requests',
+    userNotFound: 'User-not-found',
     signup:"Sign up!",
     email:"Email address",
     enterEmail: "Enter email",
@@ -30,7 +34,23 @@ const englishLanguage = {
     postText: 'Your text...',
     categoryError: 'Category not selected',
     addTags: 'Add tags',
-    
+    // admin 
+    verify: 'Verify admin',
+    deletePosts: 'Delete posts!',
+    appointAdmin: 'Appoint admin',
+    userLink: 'User link',
+    refresh: 'Refresh',
+    postId: 'Post id',
+    category: 'Category',
+    title: 'Title',
+    userRating: 'User rating',
+    authorRating: 'Author rating',
+    likes: 'Likes',
+    сreated: 'Created',
+    // MainPage
+    morePosts: 'More Posts!',
+
+
 }
 
 const russianLanguage = {
@@ -47,6 +67,9 @@ const russianLanguage = {
     languageDropdown: 'Английский язык',
     adminPageDropdown: 'Администратор',
     // login
+    errorLoginPassword: 'Неправильный пароль',
+    errorLogin: 'Invalid-email',
+    userNotFound: 'Пользователь не найден',
     signup:"Зарегистрироватся!",
     email:"Email адрес",
     enterEmail: "Введите mail",
@@ -63,8 +86,21 @@ const russianLanguage = {
     postText: 'Ваш текст...',
     categoryError: 'Категория не выбрана',
     addTags: 'Добавьте Тэги)',
-
-
+    // admin 
+    verify: 'Проверить администратора',
+    deletePosts: 'Удалить все посты!',
+    appointAdmin: 'Назначить админом',
+    userLink: 'Ссылка на пользователя',
+    refresh: 'Перезагрузка таблицы',
+    postId: 'id Поста',
+    category: 'Категория',
+    title: 'Заголовок',
+    userRating: 'Рейтинг пользователей',
+    authorRating: 'Рейтинг автора',
+    likes: 'Лайки',
+    сreated: 'Создано',
+    // MainPage
+    morePosts: 'Показать ещё!',
 }
 
 export {englishLanguage, russianLanguage}

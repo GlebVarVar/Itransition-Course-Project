@@ -6,19 +6,47 @@ const { Posts, Likes, Ratings, Tags, Photos } = require("../models");
 const { findUser } = require("../middleware/auth");
 
 router.get("/", async (req, res) => {
-  const countOfPosts = await Posts.count();
   const displayPosts = req.headers.countofdisplay;
-  if (displayPosts > countOfPosts) {
-    const listOfPosts = await Posts.findAll({ include: [Likes, Ratings, Tags, Photos] });
-    // const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
-    listOfPosts.reverse();
-    res.json({addition: false, listOfPosts: listOfPosts  })
-  } else {
-    const listOfPosts = await Posts.findAll({ limit: countOfPosts, offset: countOfPosts - displayPosts, include: [Likes, Ratings, Tags, Photos] });
-    // const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
-    listOfPosts.reverse();
-    res.json({ listOfPosts: listOfPosts });
-  }
+  const filter =  req.headers.filter;
+  
+  if (filter == 'Books' || filter == 'Games' || filter == 'Films') {
+    console.log(filter)
+    const countOfPosts = await Posts.count({ where: { category: filter } });
+    console.log(countOfPosts);
+    if (displayPosts > countOfPosts) {
+      const listOfPosts = await Posts.findAll({
+        where: { category: filter },
+        include: [Likes, Ratings, Tags, Photos],
+      });
+      listOfPosts.reverse();
+      res.json({addition: false, listOfPosts: listOfPosts  })
+    } else {
+      const listOfPosts = await Posts.findAll({
+        where: { category: filter } , 
+        include: [Likes, Ratings, Tags, Photos],
+        limit: countOfPosts, 
+        ffset: countOfPosts - displayPosts,
+      });
+      listOfPosts.reverse();
+      res.json({ listOfPosts: listOfPosts });
+    }
+  } else{
+    const countOfPosts = await Posts.count();
+    if (displayPosts > countOfPosts) {
+      const listOfPosts = await Posts.findAll({ include: [Likes, Ratings, Tags, Photos] });
+      listOfPosts.reverse();
+      res.json({addition: false, listOfPosts: listOfPosts})
+    } else {
+      const listOfPosts = await Posts.findAll({ limit: countOfPosts, offset: countOfPosts - displayPosts, include: [Likes, Ratings, Tags, Photos] });
+      listOfPosts.reverse();
+      res.json({ listOfPosts: listOfPosts });
+    }
+  } 
+  
+
+  
+  
+  
   
 });
 
@@ -62,16 +90,27 @@ router.post("/", findUser, async (req, res) => {
 //   res.json(newText);
 // });
 
-// router.delete("/:postId", validateToken, async (req, res) => {
-//   const postId = req.params.postId;
-//   await Posts.destroy({
-//     where: {
-//       id: postId,
-//     },
-//   });
+router.delete("/:postId", async (req, res) => {
+  const postId = req.params.postId;
+  await Posts.destroy({
+    where: {
+      id: postId,
+    },
+  });
 
-//   res.json("DELETED SUCCESSFULLY");
-// });
+  res.json("DELETED SUCCESSFULLY");
+});
+
+router.delete("/:email", async (req, res) => {
+  const email = req.params.email;
+  await Posts.destroy({
+    where: {
+      email: email,
+    },
+  });
+
+  res.json("DELETED SUCCESSFULLY");
+});
 
 
 

@@ -56,8 +56,14 @@ router.get("/admin", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const basicInfo = await Users.findAll({  include: [Posts, Likes, Ratings] });
+  const basicInfo = await Users.findAll({  include: [{model: Posts, include: [Likes, Ratings]}]});
   console.log(basicInfo);
+  res.json(basicInfo);
+});
+
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  const basicInfo = await Users.findOne({ where: { id: id }, include: [{model: Posts, include: [Likes, Ratings]}] });
   res.json(basicInfo);
 });
 
@@ -77,5 +83,14 @@ router.get("/", async (req, res) => {
 //     });
 //   });
 // });
+
+
+router.put("/admin/:email", async (req, res) => {
+  const email = req.params.email;
+  await Users.update({userType: 'admin'}, {where: {email: email}})
+  res.json("ADMIN ADDED SUCCESSFULLY");
+});
+
+
 
 module.exports = router;

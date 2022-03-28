@@ -1,21 +1,29 @@
-import NavBar from "../Nav/NavBar"
 
-import { userContext } from "../Contexts/Contexts";
-import { useContext } from "react";
-import axios from "axios";
 
-import { useEffect, useState } from "react";
-
+import { userContext, languageContext } from "../Contexts/Contexts";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+// Utils
+import { ownerRating, totalRating } from "../utils/Functions";
+// Components
+import { Accordion, Container, Table, Button, Col, Row, ButtonGroup } from "react-bootstrap";
+import NavBar from "../Nav/NavBar"
+import {StarRatingStatic} from "../Stars/Stars";
+import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
-import { Accordion, Container, Table, Button, Col, Row } from "react-bootstrap";
+// API
+import {putAdminAPI, getIsUserAdminAPI} from '../../services/Admin'
+import { deleteUserPostsAPI } from "../../services/Posts";
+import {getAllUsersAPI} from "../../services/Users";
 
 const AdminPage = () => {
   const context = useContext(userContext);
+  const {language} = useContext(languageContext);
 
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState(false);
+  const [data, setData] = useState([])
 
   useEffect(() => {
     if (!context) navigate(-1);
@@ -23,90 +31,96 @@ const AdminPage = () => {
     
   }, [context]);
 
-  
-  const table = (admin) => {
-    if (admin === true) {
-      return(
-        <div>AMIN</div>
-      )
-    }
-    return <div></div>
-  }
 
   const verifyAdmin = async () => {
-    const isAdmin = await axios.get("http://localhost:3001/api/users/admin", 
-      {headers: {email: context.email}})
-
+    const isAdmin = await getIsUserAdminAPI(context.email)
       .then((responce) => {
         if (responce.data.userType === 'admin') {
           return true
         }
         return false;
-
       })
 
     console.log(isAdmin);
     setAdmin(isAdmin);
-
-    allUsers();
+    getAllUsers();
   }
 
-  const allUsers = async () => {
-    const responce = await axios.get("http://localhost:3001/api/users/", {headers: {email: context.email}})
-    .then((res) => {
-      return res}
-    );
-
-    console.log(responce.data);
+  const getAllUsers = async () => {
+    const response = await getAllUsersAPI(context.email);
+    setData(response.data);
   } 
 
+
   const AdminTable = () => {
-
-    
-
     return (
-      <Accordion defaultActiveKey={['0']} alwaysOpen>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Accordion Item #1</Accordion.Header>
-          <Accordion.Body>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td colSpan={2}>Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </Table>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>Accordion Item #2</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
+      
+      <Accordion>
+      {
+        data.map((user, key) => {
+          const isDisabled = user.userType == 'admin' ? true : false
+
+          return (
+            <Accordion.Item key={key} eventKey={key}>
+              <Accordion.Header>{user.email}</Accordion.Header>
+              <Accordion.Body>
+                <ButtonGroup size="sm" className="mb-2">
+                  <Button variant="danger" onClick={() => {
+                    deleteUserPosts(user.email);
+                    getAllUsers();
+                  }}>{language.deletePosts}</Button>
+                  <Button variant="warning" onClick={() => putAdminAPI(user.email)} disabled={isDisabled} >
+                    {language.appointAdmin}
+                  </Button>
+                  <Button onClick={() => navigate(`/users/${user.id}`)} >
+                    {language.userLink}
+                  </Button>
+                  <Button variant="success" onClick={getAllUsers}>
+                    {language.refresh}
+                  </Button>
+                </ButtonGroup>
+                <Table striped bordered hover>
+
+                  <thead>
+                    <tr>
+                      <th>{language.postId}</th>
+                      <th>{language.category}</th>
+                      <th>{language.title}</th>
+                      <th>{language.userRating}</th>
+                      <th>{language.authorRating}</th>
+                      <th>{language.likes}</th>
+                      <th>{language.сreated}</th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+                  {
+                    user.Posts.map((post, key) => {
+                      const {id, category, createdAt, title, Likes} = post;
+                      
+                      return (
+                        <tr key={key} onClick={() => navigate(`/posts/${post.id}`)}>
+                          <td>{id}</td>
+                          <td>{category}</td>
+                          <td>{title}</td>
+                          <td>{<StarRatingStatic rating={totalRating(post)} />}</td>
+                          <td>{<StarRatingStatic rating={ownerRating(post)} />} </td>
+                          <td>
+                            {Likes.length} <ThumbUpAltIcon style={{color: Likes.length > 0 ? '#2193F9' : '#3FF4FC' }}/>
+                          </td>
+                          <td>{createdAt.slice(0, 10)}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                  </tbody>
+                </Table>
+              </Accordion.Body>
+            </Accordion.Item> 
+          )
+        })
+      }
+      </Accordion> 
     )
   }
 
@@ -120,7 +134,7 @@ const AdminPage = () => {
           {
             !admin &&  
             <Col md="auto">
-              <Button size="lg" onClick={verifyAdmin}>Verify admin </Button>
+              <Button size="lg" onClick={verifyAdmin}>{language.verify}</Button>
             </Col> 
           }
           

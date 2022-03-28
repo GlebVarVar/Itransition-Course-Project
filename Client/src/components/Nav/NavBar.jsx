@@ -20,34 +20,12 @@ const NavBar = () => {
 
 
     const navigate = useNavigate();
-    
 
-    const goToProfile = (e) => {
+    const goTo = (e, to) => {
         e.preventDefault();
-        console.log(context);
-        navigate(`/profile/${context.uid}`);
+        navigate(to);
     }
 
-    const goToLogin = (e) => {
-        e.preventDefault();
-        navigate('/login');
-    }
-
-    const goToMain = (e) => {
-        e.preventDefault();
-        navigate('/');
-    }
-
-    const goToCreate = (e) => {
-        e.preventDefault();
-       
-        navigate('/createpost');
-    }
-
-    const goToAdmin = (e) => {
-        e.preventDefault();
-        navigate('/adminpage');
-    }
 
     const logoColor = theme == 'light'? 'black' : 'white' 
 
@@ -68,16 +46,16 @@ const NavBar = () => {
                     style={{ maxHeight: '100px' }}
                     navbarScroll>
 
-                    <Nav.Link onClick={(e) => goToMain(e)}>{language.mainpage }</Nav.Link>
+                    <Nav.Link onClick={(e) => goTo(e, '/')}>{language.mainpage }</Nav.Link>
                     {
-                    context? <Nav.Link onClick={(e) => goToCreate(e)}> {language.createPost}</Nav.Link> : ""
+                    context? <Nav.Link onClick={(e) => goTo(e, '/createpost')}> {language.createPost}</Nav.Link> : ""
                     }
 
                     <NavDropdown title={language.dropdown} id="basic-nav-dropdown">
                         <NavDropdown.Item onClick={() => setUserLanguage()}>{language.languageDropdown}</NavDropdown.Item>
                         <NavDropdown.Item onClick={() => setTheme(theme == 'light'? 'dark' : 'light' )}>{theme == 'light'? language.themeDarkDropdown : language.themeLightDropdown}</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={(e) => goToAdmin(e)}>{language.adminPageDropdown}</NavDropdown.Item>
+                        <NavDropdown.Item onClick={(e) => goTo(e, '/adminpage')}>{language.adminPageDropdown}</NavDropdown.Item>
                     </NavDropdown>
                     
                 </Nav>
@@ -91,11 +69,11 @@ const NavBar = () => {
                         
                 </Form>
                 
-                <Nav.Link onClick={(e) => goToProfile(e)} > {context?.email}</Nav.Link>
+                <Nav.Link onClick={(e) => goTo(e, `/profile/${context.uid}`)} > {context?.email}</Nav.Link>
                 {
                     context? <Button variant="outline-danger" onClick={(e) => {
                         logout(e)
-                    }} >{language.logout}</Button> : <Button variant="outline-success"  onClick={(e) => goToLogin(e)} >{language.login}</Button>
+                    }} >{language.logout}</Button> : <Button variant="outline-success"  onClick={(e) => goTo(e, '/login')} >{language.login}</Button>
                 }
                 </Navbar.Collapse>
             </Container>

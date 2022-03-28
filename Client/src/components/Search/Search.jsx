@@ -1,20 +1,19 @@
-import { Dropdown } from 'semantic-ui-react'
-import React, { Component } from 'react'
-import './Search.css';
 
 import { useState, useContext } from 'react';
-import axios from 'axios';
-
-
 import { languageContext } from '../Contexts/Contexts';
+
+import { Dropdown } from 'semantic-ui-react'
+
+import './Search.css';
+
+
 
 const  DropdownExampleAllowAdditions = (props) => {
 
     const {language} = useContext(languageContext);
     const {tags, setTags} = props;
 
-  const [options, setOptions] =useState(props.alltags)
-    // const [currentValues, setSearchValues] = useState([]);
+  const [options, setOptions] =useState(props.alltags);
   
 
   const handleAddition = (e, { value }) => {
@@ -27,8 +26,6 @@ const  DropdownExampleAllowAdditions = (props) => {
     };
   
   
-    
-
     return (
       <Dropdown
         style={{borderColor: "#0d6efd"}}

@@ -3,7 +3,7 @@ import {userContext, languageContext} from '../Contexts/Contexts';
 import {auth, login, googleLogin} from '../../services/firebase'
 import { useNavigate, Link } from "react-router-dom";
 
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import NavBar from "../Nav/NavBar";
 
 
@@ -21,7 +21,8 @@ function App() {
   const navigate = useNavigate();
 
   const {language} = useContext(languageContext);
-  const context = useContext(userContext)  
+  console.log(language)
+  const context = useContext(userContext);  
   
   useEffect(() => {
     if (context) navigate(-1); 
@@ -33,8 +34,41 @@ function App() {
   const loginFirebase = async () => {
     const responce = await login(auth, loginEmail, loginPassword);
     if (responce) {
+      // Error handling in Russian
+
+      // switch (responce.error.code.slice(5)) {
+      //   case 'wrong-password':
+      //     setErrorLogin({
+      //       errorMessage: language.errorLoginPassword
+      //     });
+      //     console.log(errorLogin.errorMessage);
+      //     break;
+      //   case 'invalid-email':
+      //     setErrorLogin({
+      //       errorMessage: language.errorLogin
+      //     });
+      //     break;
+      //   case 'user-not-found':
+      //     setErrorLogin({
+      //       errorMessage: language.userNotFound
+      //     });
+      //     break;
+      //   case 'too-many-requests':
+      //     setErrorLogin({
+      //       errorMessage: language.errorManyRequests
+      //     });
+      //     console.log(errorLogin.errorMessage);
+      //     console.log(language.errorManyRequests);
+      //     break;
+      //   default:
+      //     setErrorLogin({
+      //       errorMessage: responce.error.code
+      //     });
+      //     break;
+      // }
+      
       setErrorLogin({
-        errorMessage: responce.error.code,
+        ...errorLogin,
         error: true
       });
     } else {
@@ -45,7 +79,8 @@ function App() {
       setLoginEmail('');
       setLoginPassword('');
     }
-    console.log(responce);
+    console.log(errorLogin)
+    console.log(responce.error);
   }
 
 
@@ -56,7 +91,9 @@ function App() {
         
        <Form className="rounded p-4 p-sm-3">
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>{language.email}</Form.Label>
+            <Form.Label>
+              {language.email}
+            </Form.Label>
             <Form.Control type="email" placeholder={language.enterEmail} onChange={(e) => setLoginEmail(e.target.value)}/>
             <Form.Text className="text-muted">
               {language.privacy}
@@ -64,9 +101,10 @@ function App() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>{language.password}</Form.Label>
+            <Form.Label>
+              {language.password}
+            </Form.Label>
             <Form.Control type="password" placeholder={language.password} onChange={(e) => setLoginPassword(e.target.value)}/>
-
             {
               errorLogin.error ? 
               <Form.Text style={{ color: "red" }}>

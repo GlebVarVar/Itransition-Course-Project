@@ -1,23 +1,23 @@
 {
-    "development": {
-      "username": "root",
-      "password": "Gleb270803",
-      "database": "itransitionsdb",
-      "host": "localhost",
-      "dialect": "mysql"
-    },
-    "test": {
-      "username": "root",
-      "password": "Gleb270803",
-      "database": "itransitionsdb",
-      "host": "sql11.freesqldatabase.com",
-      "dialect": "mysql"
-    },
-    "production": {
-      "username": "root",
-      "password": "Gleb270803",
-      "database": "itransitionsdb",
-      "host": "sql11.freesqldatabase.com",
-      "dialect": "mysql"
-    }
+  "development": {
+    "username": "sql11480316",
+    "password": "jVw6NHW8DA",
+    "database": "sql11480316",
+    "host": "sql11.freesqldatabase.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "sql11480316",
+    "password": "jVw6NHW8DA",
+    "database": "sql11480316",
+    "host": "sql11.freesqldatabase.com",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "sql11480316",
+    "password": "jVw6NHW8DA",
+    "database": "sql11480316",
+    "host": "sql11.freesqldatabase.com",
+    "dialect": "mysql"
   }
+}

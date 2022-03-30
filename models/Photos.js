@@ -5,10 +5,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        Preview: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
     });
 
     return Photos;

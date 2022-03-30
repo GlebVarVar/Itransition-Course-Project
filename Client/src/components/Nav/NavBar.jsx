@@ -8,9 +8,11 @@ import { Link } from 'react-router-dom';
 
 
 import { themeContext, userContext, languageContext } from '../Contexts/Contexts';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 import { russianLanguage, englishLanguage } from '../Translation/Languages';
+
+import { getIsUserAdminAPI } from '../../services/Admin';
 
 const NavBar = () => {
 
@@ -18,7 +20,8 @@ const NavBar = () => {
     const {theme, setTheme} = useContext(themeContext); 
     const {language, setLanguage} = useContext(languageContext); 
 
-
+    const [id, setId] = useState('');
+    
     const navigate = useNavigate();
 
     const goTo = (e, to) => {
@@ -26,6 +29,14 @@ const NavBar = () => {
         navigate(to);
     }
 
+    useEffect(() => {
+        if (context) {
+            getIsUserAdminAPI(context.email).then((res) => {
+                setId(res.data.id)
+            })
+        }
+        
+    }, []);
 
     const logoColor = theme == 'light'? 'black' : 'white' 
 
@@ -69,7 +80,10 @@ const NavBar = () => {
                         
                 </Form>
                 
-                <Nav.Link onClick={(e) => goTo(e, `/profile/${context.uid}`)} > {context?.email}</Nav.Link>
+                <Nav.Link onClick={(e)  =>  {
+                    
+                    goTo(e, `/profile/${id}`)
+                }}> {context?.email}</Nav.Link>
                 {
                     context? <Button variant="outline-danger" onClick={(e) => {
                         logout(e)

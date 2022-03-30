@@ -2,10 +2,9 @@ import NavBar from "../Nav/NavBar"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import {userContext} from "../Contexts/Contexts";
+import {userContext, languageContext} from "../Contexts/Contexts";
 import { useContext } from "react";
 
-import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
@@ -27,7 +26,9 @@ import { getRatingAPI } from "../../services/Rating";
 
 const Post = () => {
   const context = useContext(userContext);
-  console.log(context);
+  const {language} = useContext(languageContext);
+  console.log(language)
+
   let {postId} = useParams(); 
 
   let navigate = useNavigate()
@@ -111,13 +112,6 @@ const Post = () => {
 
   
 
-
-  // onClick={() => {
-  //   if(context.email === postObject.email) {
-  //     editPost("title")
-  //   }
-  //   }}> 
-
   const CommentsSection = () => {
       return (
         <div className='rightSide'>
@@ -161,7 +155,7 @@ const Post = () => {
             <Col >
               <ButtonGroup aria-label="Basic example">
                 <Button variant="primary" size="lg" disabled >
-                  Category:
+                  {language.category}:
                 </Button>
                 <Button variant="primary" size="lg" onClick={(e) => {
                   e.preventDefault();
@@ -175,7 +169,7 @@ const Post = () => {
             <Col >
               <ButtonGroup aria-label="Basic example" style={{float: 'right'}}>
                 <Button variant="primary" size="lg" disabled >
-                  Tags:
+                  {language.tags}
                 </Button>
                 {
                   postObject.Tags.map((tag, key) => {

@@ -13,7 +13,7 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
 // API
 import {putAdminAPI, getIsUserAdminAPI} from '../../services/Admin'
-import { deleteUserPostsAPI } from "../../services/Posts";
+import { deleteUserPostsAPI, deleteUserPostAPI } from "../../services/Posts";
 import {getAllUsersAPI} from "../../services/Users";
 
 const AdminPage = () => {
@@ -90,6 +90,7 @@ const AdminPage = () => {
                       <th>{language.authorRating}</th>
                       <th>{language.likes}</th>
                       <th>{language.сreated}</th>
+                      <th>{language.deletePostText}</th>
                     </tr>
                   </thead>
                   
@@ -99,16 +100,20 @@ const AdminPage = () => {
                       const {id, category, createdAt, title, Likes} = post;
                       
                       return (
-                        <tr key={key} onClick={() => navigate(`/posts/${post.id}`)}>
-                          <td>{id}</td>
-                          <td>{category}</td>
-                          <td>{title}</td>
-                          <td>{<StarRatingStatic rating={totalRating(post)} />}</td>
-                          <td>{<StarRatingStatic rating={ownerRating(post)} />} </td>
-                          <td>
+                        <tr key={key} >
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{id}</td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{category}</td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{title}</td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{<StarRatingStatic rating={totalRating(post)} />}</td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{<StarRatingStatic rating={ownerRating(post)} />} </td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>
                             {Likes.length} <ThumbUpAltIcon style={{color: Likes.length > 0 ? '#2193F9' : '#3FF4FC' }}/>
                           </td>
-                          <td>{createdAt.slice(0, 10)}</td>
+                          <td onClick={() => navigate(`/posts/${post.id}`)}>{createdAt.slice(0, 10)}</td>
+                          <td><Button onClick={(e) => {
+                              e.preventDefault();
+                              deleteUserPostAPI(id);
+                            }}>{language.deletePost}</Button></td>
                         </tr>
                       )
                     })

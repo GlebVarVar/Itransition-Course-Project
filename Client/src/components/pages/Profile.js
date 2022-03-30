@@ -62,7 +62,7 @@ const Profile = () => {
                       <th>{language.сreated}</th>
                       {
                         context.email == data.email ? 
-                        <th>Delete post</th>
+                        <th>{language.deletePostText}</th>
                         : null
                       }
                       
@@ -96,7 +96,7 @@ const Profile = () => {
                                   setData(res.data);
                                 })
                               }
-                            }}>Delete!</Button></td>
+                            }}>{language.deletePost}</Button></td>
                             : null
                           }
 

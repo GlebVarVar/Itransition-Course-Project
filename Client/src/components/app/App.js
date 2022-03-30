@@ -32,9 +32,6 @@ function App() {
   const [language, setLanguage] = useState(localStorageLanguage);
   
 
-  // if (localStorage.getItem('language')) {
-  //   setLanguage(localStorage.getItem('language'));
-  // }
 
   if (loading) {
     return (
@@ -61,6 +58,7 @@ function App() {
               <Route path="/createpost" element={<CreatePost/>}/>
               <Route path="/profile/resetpassword" element={<ResetPassword/>}/>
               <Route path="/adminpage" element={<AdminPage/>}/>
+              <Route path="/edit/:postId" element={<AdminPage/>}/>
               <Route path="*" element={<Page404/>}/>
             </Routes>
           </Router>

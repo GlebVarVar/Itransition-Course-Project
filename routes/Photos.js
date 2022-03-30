@@ -8,8 +8,6 @@ router.post("/",  async (req, res) => {
     console.log(req.body)
      
     if (mas.length !==0 ) {
-        await Photos.create({Photo: mas[0], PostId, Preview: true});
-        mas.pop(0);
         console.log(mas);
         mas.forEach(async (Photo)  => {
             await Photos.create({Photo, PostId});

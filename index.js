@@ -8,7 +8,6 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static((__dirname + '/Client')));
 
 const db = require('./models');
 

@@ -55,6 +55,7 @@ router.get("/admin", async (req, res) => {
   res.json(basicInfo);
 });
 
+
 router.get("/", async (req, res) => {
   const basicInfo = await Users.findAll({  include: [{model: Posts, include: [Likes, Ratings]}]});
   console.log(basicInfo);

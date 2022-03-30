@@ -55,16 +55,16 @@ const MainPage = () => {
               <InputGroup className="mb-3">
                 <DropdownButton
                   variant="outline-primary"
-                  title='filters'
+                  title={language.filter}
                   drop='end'
                   id="input-group-dropdown-1"
                 >
                   <Dropdown.Item onClick={() => {
                     setFilter('new');
-                  }}>Latests</Dropdown.Item>
+                  }}>{language.latest}</Dropdown.Item>
                   <Dropdown.Item onClick={() => {
                     setFilter('Rating');
-                  }}>High rating</Dropdown.Item>
+                  }}>{language.highRating}</Dropdown.Item>
                   <NavDropdown.Divider />
                   <Dropdown.Item onClick={() => {
                     setFilter('Films');

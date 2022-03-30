@@ -4,6 +4,8 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 
+import { _apiBase } from ".";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAkQcVhlydWtlMOqF0JTN2FDDNBbD2XizI",
   authDomain: "first-project-1c025.firebaseapp.com",
@@ -55,7 +57,7 @@ const googleLogin = async (auth) => {
   try {
     const result = await signInWithPopup(auth, provider);
     
-    await axios.post("http://localhost:3001/api/users/registration", {email: result.user.email, username: result.user.displayName })
+    await axios.post(`${_apiBase}/users/registration`, {email: result.user.email, username: result.user.displayName })
     console.log(result.user);
   } catch (error) {
     return error.message

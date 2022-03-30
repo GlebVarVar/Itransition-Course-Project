@@ -4,6 +4,7 @@ import {userContext, languageContext} from "../Contexts/Contexts";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
+import {_apiBase} from "../../services";
 
 import { InputGroup, DropdownButton, Dropdown, Toast, FormControl, Tabs, Tab, Form,Carousel, Container, FloatingLabel, Col, Row, ButtonGroup, Button } from "react-bootstrap";
 import NavBar from "../Nav/NavBar"
@@ -48,7 +49,7 @@ const CreatePost = () => {
   // console.log(tags);
 
   const getAllTags = async() => {
-    const options = await axios.get(`http://localhost:3001/api/tags/all`);
+    const options = await axios.get(`${_apiBase}/tags/all`);
     const listOfTags = options.data ;
     setAlltags(listOfTags.map((tag, key) => {
       return {key: key, text: tag.tag, value: tag.tag}
@@ -99,7 +100,7 @@ const CreatePost = () => {
 
         setImageLinks([]);
         setPhotos([{
-          profileIng: 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg'
+          profileIng: 'https://crankwheel.com/uploads/2019/06/12/CW_How%20to%20deliver%20the%20perfect%20instant%20online%20product%20demo.jpg'
         }]);
         setPhotosToUpload([]);
         setTags([]);
@@ -110,8 +111,8 @@ const CreatePost = () => {
       const PostId = res.data;
       console.log(tags);
 
-      await axios.post('http://localhost:3001/api/tags/', {tags, PostId});
-      await axios.post('http://localhost:3001/api/rating/', {Rating, email, PostId});
+      await axios.post(`${_apiBase}/tags/`, {tags, PostId});
+      await axios.post(`${_apiBase}/rating/`, {Rating, email, PostId});
       uploadImage(PostId);
       
 
@@ -123,7 +124,7 @@ const CreatePost = () => {
       console.log(tags, newAlltags);
       tags.forEach((tag) => {
         if(newAlltags.includes(tag)  !== true){
-          axios.post('http://localhost:3001/api/tags/all', {tag}).then((res) => console.log(res))
+          axios.post(`${_apiBase}/tags/all`, {tag}).then((res) => console.log(res))
         } 
       });
       
@@ -149,7 +150,7 @@ const CreatePost = () => {
       
       console.log(mas);
       setImageLinks(mas);
-      await axios.post('http://localhost:3001/api/photos/', {PostId, mas});
+      await axios.post(`${_apiBase}/photos/`, {PostId, mas});
     }
 
 
@@ -160,7 +161,7 @@ const CreatePost = () => {
         reader.readAsDataURL(item);
         reader.onload = async () => {
           if (reader.readyState === 2) {
-            if(photos[0].profileIng === 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg') {
+            if(photos[0].profileIng === 'https://crankwheel.com/uploads/2019/06/12/CW_How%20to%20deliver%20the%20perfect%20instant%20online%20product%20demo.jpg') {
               setPhotos([{profileIng: reader.result}]);
             } else {
               setPhotos([...photos, {profileIng: reader.result}]);
@@ -237,19 +238,19 @@ const CreatePost = () => {
             <Col >
               <Row className="g-2">
                 <Col md>
-                  <FloatingLabel controlId="floatingInputGrid" label="Title">
+                  <FloatingLabel controlId="floatingInputGrid" label={language.title}>
                     <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} placeholder="Iron Man" />
                   </FloatingLabel>
                 </Col>
                 <Col md>
-                  <FloatingLabel controlId="floatingSelectGrid" label="Rating">
+                  <FloatingLabel controlId="floatingSelectGrid" label={language.rating}>
                     <Form.Select aria-label="Floating label select example" value={Rating} onChange={(e) => setRating(e.target.value)}>
-                      <option>Open this select menu</option>
-                      <option value="5">5 - Awesome!</option>
-                      <option value="4">4 - Great!</option>
-                      <option value="3">3 - Okay</option>
-                      <option value="2">2 - bad</option>
-                      <option value="1">1 - horrible</option>
+                      <option>{language.openMenu}</option>
+                      <option value="5">5 - {language.awesome}</option>
+                      <option value="4">4 - {language.great}</option>
+                      <option value="3">3 - {language.okay}</option>
+                      <option value="2">2 - {language.bad}</option>
+                      <option value="1">1 - {language.horrible}</option>
                     </Form.Select>
                   </FloatingLabel>
                 </Col>
@@ -277,7 +278,7 @@ const CreatePost = () => {
               </Row>
               <Row>
                 <Form.Group controlId="formFileMultiple" className="mb-3">
-                  <Form.Label>Upload your photos(10 Max)!</Form.Label>
+                  <Form.Label>{language.upload}</Form.Label>
                   <Form.Control onChange={(e) => {
                     if (PhotosToUpload.length != 10) {
                       imageHandler(e);
@@ -287,14 +288,11 @@ const CreatePost = () => {
                         setPhotosToUpload([e.target.files[0]])
                       }
                     }
-                    
-                    
-                    // console.log(PhotosToUpload);
 
                   }} 
                     type="file"
                     accept=".png,.jpg,.jpeg,.webp" />
-                  <Button onClick={createPost}>Submit</Button>
+                  <Button onClick={createPost}>{language.submit}</Button>
                 </Form.Group>
               </Row>
               <Row>
@@ -307,8 +305,8 @@ const CreatePost = () => {
             <Col>
               <Row>
                 <Tabs defaultActiveKey="Edit" id="uncontrolled-tab-example" className="mb-3">
-                  <Tab eventKey="Edit" title="Edit">
-                    <FloatingLabel controlId="floatingTextarea2" label="Your text here">
+                  <Tab eventKey="Edit" title={language.edit}>
+                    <FloatingLabel controlId="floatingTextarea2" label={language.yourTextHere}>
                       <Form.Control
                       value={postText}
                       onChange={(e) => setPostText(e.target.value)}
@@ -318,7 +316,7 @@ const CreatePost = () => {
                       />
                     </FloatingLabel>
                   </Tab>
-                  <Tab eventKey="Preview" title="Preview">
+                  <Tab eventKey="Preview" title={language.preview}>
                   <ReactMarkdown>{postText}</ReactMarkdown>
                   </Tab>
                 </Tabs>

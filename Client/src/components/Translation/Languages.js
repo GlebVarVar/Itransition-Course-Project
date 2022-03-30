@@ -36,7 +36,7 @@ const englishLanguage = {
     addTags: 'Add tags',
     // admin 
     verify: 'Verify admin',
-    deletePosts: 'Delete posts!',
+    deletePosts: 'Delete all posts!',
     appointAdmin: 'Appoint admin',
     userLink: 'User link',
     refresh: 'Refresh',
@@ -49,8 +49,26 @@ const englishLanguage = {
     сreated: 'Created',
     // MainPage
     morePosts: 'More Posts!',
-
-
+    tags: 'Tags:',
+    filter: 'Filter',
+    latest: 'Latest',
+    highRating: 'High rating',
+    // Profile 
+    deletePost: 'Delete!',
+    deletePostText: 'Dlete Post!',
+    // create post
+    awesome: 'Awesome!',
+    great: 'Great!',
+    okay: 'Okay',
+    bad: 'Bad',
+    horrible: 'Horrible',
+    rating: 'Rating',
+    openMenu: 'Open this select menu',
+    upload: 'Upload your photos(10 Max)!',
+    edit: 'Edit',
+    yourTextHere: 'Your text here',
+    preview: 'Preview',
+    submit: 'Submit!'
 }
 
 const russianLanguage = {
@@ -101,6 +119,27 @@ const russianLanguage = {
     сreated: 'Создано',
     // MainPage
     morePosts: 'Показать ещё!',
+    filter: 'Фильтр',
+    latest: 'Последние',
+    highRating: 'Высокий рэйтинг',
+    // Post
+    tags: 'Тэги:',
+    // Profile 
+    deletePost: 'Удалить!',
+    deletePostText: 'Удалить Пост!',
+    // create post
+    awesome: 'Превосходно!',
+    great: 'Отлично!',
+    okay: 'Хорошо',
+    bad: 'Плохо',
+    horrible: 'Ужасно',
+    rating: 'Рэйтинг',
+    openMenu: 'Открыть меню',
+    upload: 'Загрузите фото (10 максимум)!',
+    edit: 'Редактор',
+    yourTextHere: 'Ваш текст',
+    preview: 'Превью',
+    submit: 'Создать!'
 }
 
 export {englishLanguage, russianLanguage}

@@ -7,7 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { _apiBase } from ".";
 
 const firebaseConfig = {
- // your config
+  apiKey: "AIzaSyAkQcVhlydWtlMOqF0JTN2FDDNBbD2XizI",
+  authDomain: "first-project-1c025.firebaseapp.com",
+  databaseURL: "https://first-project-1c025-default-rtdb.firebaseio.com",
+  projectId: "first-project-1c025",
+  storageBucket: "first-project-1c025.appspot.com",
+  messagingSenderId: "783209274400",
+  appId: "1:783209274400:web:3e4d29500fc5f5b3923045"
 };
 
 const app = initializeApp(firebaseConfig);

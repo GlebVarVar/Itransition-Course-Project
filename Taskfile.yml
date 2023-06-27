@@ -1,0 +1,10 @@
+version: '3'
+
+tasks:
+  frontend:
+    cmds:
+      - cd frontend && npm start
+
+  backend:
+    cmds:
+      - cd backend && npm start

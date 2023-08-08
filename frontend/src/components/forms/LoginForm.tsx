@@ -1,25 +1,23 @@
 // import Form from 'react-bootstrap/Form';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/scss/bootstrap.min.scss';
 // import Button from 'react-bootstrap/Button';
 // import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { useAuthState } from 'react-firebase-hooks/auth';
 // import { auth, firebaseLogin } from '../../services/firebase';
 
-
 // const LoginForm = () => {
 //     const [email, setEmail] = useState("");
 //     const [password, setPassword] = useState("");
 //     const [user, loading, error] = useAuthState(auth);
 //     const navigate = useNavigate();
-  
+
 //     useEffect(() => {
 //       if (loading) {
 //         // maybe trigger a loading screen
 //         return;
 //       }
 //       if (user) navigate("/");
-//       console.log(user);
 //     }, [user, loading]);
 
 //     return (

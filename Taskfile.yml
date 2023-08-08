@@ -15,3 +15,8 @@ tasks:
     desc: Запуск backend 
     cmds:
       - cd backendv2 && yarn start:dev
+
+  db:
+    desc: Запуск базы данных
+    cmds:
+      - cd .infra && docker compose up -d

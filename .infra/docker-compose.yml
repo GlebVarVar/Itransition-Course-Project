@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql
+    # command: --default-authentication-plugin=mysql_native_password
+    container_name: ${PROJECT}_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:3306"

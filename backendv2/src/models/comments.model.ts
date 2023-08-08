@@ -1,19 +1,19 @@
-module.exports = (sequelize, DataTypes) => {
+import { Column, Model, Table, BelongsTo } from 'sequelize-typescript';
+import { Posts } from './';
 
-    const Comments = sequelize.define("Comments", {
-        commentBody: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+@Table
+export class Comments extends Model {
+  @Column
+  username: string;
 
-    return Comments;
+  @Column
+  email: string;
+
+  @Column({
+    field: 'comment_body',
+  })
+  commentBody: string;
+
+  @BelongsTo(() => Posts, 'post_id')
+  postId: number;
 }

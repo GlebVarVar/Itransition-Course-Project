@@ -1,11 +1,13 @@
-module.exports = (sequelize, DataTypes) => {
+import { Column, Model, Table, BelongsTo } from 'sequelize-typescript';
+import { Users, Posts } from './';
+@Table
+export class Ratings extends Model {
+  @Column
+  rating: number;
 
-    const Ratings = sequelize.define("Ratings", {
-        Rating: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-    });
+  @BelongsTo(() => Users, 'user_id')
+  userId: Users;
 
-    return Ratings;
+  @BelongsTo(() => Posts, 'post_id')
+  postId: Posts;
 }

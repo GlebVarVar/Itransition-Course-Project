@@ -1,31 +1,35 @@
-module.exports = (sequelize, DataTypes) => {
+import { AllowNull, Column, Model, Table, HasMany } from 'sequelize-typescript';
+import { Likes, Posts, Ratings } from './';
 
-    const Users = sequelize.define("Users", {
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        userType: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-    });
+@Table
+export class Users extends Model {
+  @Column
+  username: string;
 
-    Users.associate = (models) => {
-        Users.hasMany(models.Likes, {
-            onDelete: "cascade",
-        }); 
-        Users.hasMany(models.Posts, {
-            onDelete: "cascade",
-        });
-        Users.hasMany(models.Ratings, {
-            onDelete: "cascade",
-        });
-    };
+  @Column
+  email: string;
 
-    return Users;
+  @AllowNull
+  @Column({
+    field: 'user_type',
+  })
+  userType: string;
+
+  @HasMany(() => Likes, {
+    onDelete: 'CASCADE',
+    foreignKey: 'user_id',
+  })
+  likes: Likes[];
+
+  @HasMany(() => Posts, {
+    onDelete: 'CASCADE',
+    foreignKey: 'user_id',
+  })
+  posts: Posts[];
+
+  @HasMany(() => Ratings, {
+    onDelete: 'CASCADE',
+    foreignKey: 'user_id',
+  })
+  ratings: Ratings[];
 }

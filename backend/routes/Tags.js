@@ -9,8 +9,6 @@ router.get("/all",  async (req, res) => {
     
 });
 
-
-
 router.post("/all",  async (req, res) => {
     const {tag} = req.body;
     await Alltags.create({tag: tag});

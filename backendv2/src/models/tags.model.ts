@@ -1,11 +1,10 @@
-module.exports = (sequelize, DataTypes) => {
+import { Column, Model, Table, BelongsTo } from 'sequelize-typescript';
+import { Posts } from './posts.model';
+@Table
+export class Tags extends Model {
+  @Column
+  tag: string;
 
-    const Tags = sequelize.define("Tags", {
-        tag: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
-
-    return Tags;
+  @BelongsTo(() => Posts, 'post_id')
+  post: Posts;
 }

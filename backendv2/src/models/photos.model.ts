@@ -1,11 +1,18 @@
-module.exports = (sequelize, DataTypes) => {
+import {
+  Column,
+  Model,
+  Table,
+  AllowNull,
+  BelongsTo,
+} from 'sequelize-typescript';
+import { Posts } from './posts.model';
 
-    const Photos = sequelize.define("Photos", {
-        Photo: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-    });
+@Table
+export class Photos extends Model {
+  @AllowNull
+  @Column
+  photo: string;
 
-    return Photos;
+  @BelongsTo(() => Posts, 'post_id')
+  post: Posts;
 }

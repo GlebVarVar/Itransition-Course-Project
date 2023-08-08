@@ -1,45 +1,63 @@
-module.exports = (sequelize, DataTypes) => {
+import {
+  Column,
+  Model,
+  Table,
+  HasMany,
+  DataType,
+  BelongsTo,
+} from 'sequelize-typescript';
+import { Comments, Likes, Photos, Ratings, Tags, Users } from './';
 
-    const Posts = sequelize.define("Posts", {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        postText: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        category: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+@Table
+export class Posts extends Model {
+  @Column
+  title: string;
 
-    Posts.associate = (models) => {
-        Posts.hasMany(models.Comments, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Likes, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Tags, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Ratings, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Photos, {
-            onDelete: "cascade",
-        });
-    }
+  @Column({
+    field: 'post_text',
+    type: DataType.TEXT,
+  })
+  postText: string;
 
-    return Posts;
+  @Column
+  username: string;
+
+  @Column
+  email: string;
+
+  @Column
+  category: string;
+
+  @HasMany(() => Likes, {
+    onDelete: 'CASCADE',
+    foreignKey: 'post_id',
+  })
+  likes: Likes[];
+
+  @HasMany(() => Ratings, {
+    onDelete: 'CASCADE',
+    foreignKey: 'post_id',
+  })
+  ratings: Ratings[];
+
+  @HasMany(() => Comments, {
+    onDelete: 'CASCADE',
+    foreignKey: 'post_id',
+  })
+  comments: Comments[];
+
+  @HasMany(() => Tags, {
+    onDelete: 'CASCADE',
+    foreignKey: 'post_id',
+  })
+  tags: Tags[];
+
+  @HasMany(() => Photos, {
+    onDelete: 'CASCADE',
+    foreignKey: 'post_id',
+  })
+  photos: Photos[];
+
+  @BelongsTo(() => Users, 'user_id')
+  user: Users;
 }

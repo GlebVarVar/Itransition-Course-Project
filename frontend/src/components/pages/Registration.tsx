@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
-import { userContext, languageContext } from '../Contexts/Contexts';
+import { useState, useEffect } from 'react';
 import { auth, register } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +7,20 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 
 import { postRegistraionAPI } from '../../services/Users';
 
+
+
+
+
 import { useTranslation } from 'react-i18next';
+import {SubmitHandler, useForm} from "react-hook-form";
+
+import {useDispatch} from "react-redux";
+
+interface RegistrationForm {
+    username: string;
+    email: string;
+    password: string;
+}
 
 export const Registration = () => {
   const [registerEmail, setRegisterEmail] = useState('');
@@ -19,7 +31,13 @@ export const Registration = () => {
     error: false,
   });
 
-  const context = useContext(userContext);
+
+  const dispatch = useDispatch();
+
+
+  const { register, handleSubmit, watch, formState: { errors }} = useForm<RegistrationForm>()
+    console.log(watch("email"));
+  const onSubmit: SubmitHandler<RegistrationForm> = data => console.log(data);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -49,12 +67,12 @@ export const Registration = () => {
   return (
     <div>
       <NavBar />
-
       <div className="d-flex align-items-center justify-content-center" style={{ height: '500px' }}>
-        <Form className="rounded p-4 p-sm-3">
+        <Form className="rounded p-4 p-sm-3" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>{t("username")}</Form.Label>
             <Form.Control
+              {...register("username")}
               type="email"
               placeholder={t("enterUsername")}
               onChange={(e) => setUsername(e.target.value)}
@@ -64,6 +82,7 @@ export const Registration = () => {
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>{t("email")}</Form.Label>
             <Form.Control
+              {...register("email")}
               type="email"
               placeholder={t("enterEmail")}
               onChange={(e) => setRegisterEmail(e.target.value)}
@@ -74,6 +93,7 @@ export const Registration = () => {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>{t("password")}</Form.Label>
             <Form.Control
+                {...register("password")}
               type="password"
               placeholder={t("password")}
               onChange={(e) => setRegisterPassword(e.target.value)}
@@ -89,9 +109,9 @@ export const Registration = () => {
           <Form.Group className="mb-3">
             <Row>
               <Col>
-                <Button variant="primary" onClick={regFirebase}>
+                <Form.Control type="submit" >
                   {t("signup")}
-                </Button>
+                </Form.Control>
               </Col>
             </Row>
           </Form.Group>

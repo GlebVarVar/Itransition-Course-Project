@@ -1,4 +1,4 @@
-import { userContext, languageContext } from '../Contexts/Contexts';
+import { userContext } from '../Contexts/Contexts';
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Utils
@@ -20,7 +20,6 @@ import { useTranslation } from 'react-i18next';
 
 export const AdminPage = () => {
   const context = useContext(userContext);
-  const { language } = useContext(languageContext);
 
   const { t, i18n } = useTranslation();
 

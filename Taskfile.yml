@@ -14,7 +14,7 @@ tasks:
   backend:
     desc: Запуск backend 
     cmds:
-      - cd backendv2 && yarn start:dev
+      - cd backend && yarn dev
 
   db:
     desc: Запуск базы данных

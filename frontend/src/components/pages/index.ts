@@ -6,4 +6,3 @@ export * from "./Page404";
 export * from "./Post";
 export * from "./Profile";
 export * from "./Registration";
-export * from "./ResetPassword";

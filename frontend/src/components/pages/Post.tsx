@@ -2,7 +2,7 @@ import { NavBar } from '@/components/Nav';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { userContext, languageContext } from '../Contexts/Contexts';
+import { userContext  } from '../Contexts/Contexts';
 import { useContext } from 'react';
 
 import { useNavigate } from 'react-router-dom';

@@ -1,11 +1,9 @@
 import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-import { logout } from '../../services/firebase';
 
 import { Link } from 'react-router-dom';
 
-import { userContext } from '../Contexts/Contexts';
 import { useContext, useState, useEffect } from 'react';
 
 
@@ -24,7 +22,6 @@ export const NavBar = () => {
 
   const { t, i18n } = useTranslation();
 
-  const context = useContext(userContext);
 
   const [id, setId] = useState('');
 
@@ -41,13 +38,13 @@ export const NavBar = () => {
     });
   };
 
-  useEffect(() => {
-    if (context) {
-      getIsUserAdminAPI(context.email).then((res) => {
-        setId(res.data.id);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (context) {
+  //     getIsUserAdminAPI(context.email).then((res) => {
+  //       setId(res.data.id);
+  //     });
+  //   }
+  // }, []);
 
   const logoColor = theme == 'light' ? 'black' : 'white';
 
@@ -63,11 +60,11 @@ export const NavBar = () => {
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
             <Nav.Link onClick={(e) => goTo(e, '/')}>{t('mainpage')}</Nav.Link>
-            {context ? (
-              <Nav.Link onClick={(e) => goTo(e, '/createpost')}> {t('createPost')}</Nav.Link>
-            ) : (
-              ''
-            )}
+            {/*{context ? (*/}
+            {/*  <Nav.Link onClick={(e) => goTo(e, '/createpost')}> {t('createPost')}</Nav.Link>*/}
+            {/*) : (*/}
+            {/*  ''*/}
+            {/*)}*/}
 
             <NavDropdown title={t('dropdown')} id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => setUserLanguage()}>
@@ -95,7 +92,6 @@ export const NavBar = () => {
             onClick={(e) => {
               goTo(e, `/profile/${id}`);
             }}>
-            {' '}
             {context?.email}
           </Nav.Link>
           {context ? (

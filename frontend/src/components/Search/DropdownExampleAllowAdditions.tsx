@@ -1,9 +1,6 @@
-import { useState, useContext, FC } from 'react';
-import { languageContext } from '../Contexts/Contexts';
-
+import { useState, FC } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
-import './Search.scss';
 
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,4 @@
 import { useState, useContext, FC } from 'react';
-import s from './Stars.module.scss';
 import clsx from 'clsx';
 import { userContext } from '../Contexts/Contexts';
 
@@ -25,7 +24,7 @@ export const StarRating: FC<StarRatingProps> = ({ userRating, setUserRating }) =
           <button
             type="button"
             key={index}
-            className={clsx(index <= (hover || userRating) ? s.on : s.off)}
+            className={clsx(index <= (hover || userRating) ? "on" : "off")}
             onClick={(e) => {
               e.preventDefault();
               setUserRating(index);

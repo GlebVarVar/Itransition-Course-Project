@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from 'react';
-import { userContext, languageContext } from '../Contexts/Contexts';
+import { userContext } from '../Contexts/Contexts';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import { _apiBase } from '../../services';
+import { DropdownExampleAllowAdditions } from "@/components/Search";
 
 import {
   InputGroup,
@@ -23,8 +24,8 @@ import {
   Button,
 } from 'react-bootstrap';
 import { NavBar } from '@/components/Nav';
-import { DropdownExampleAllowAdditions } from '../Search';
 import { Image } from 'cloudinary-react';
+
 
 
 
@@ -234,7 +235,7 @@ export const CreatePost = () => {
             <Col xs={6} md={4}>
               {category !== 'Choose category' ? (
                 category !== 'Выбор категории' ? (
-                  <DropdownExampleMultipleSearchSelection
+                  <DropdownExampleAllowAdditions
                     alltags={alltags}
                     setTags={setTags}
                     tags={tags}

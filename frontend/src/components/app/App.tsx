@@ -4,7 +4,6 @@ import {
   CreatePost,
   Profile,
   AdminPage,
-  ResetPassword,
   Login,
   Page404,
   Registration,
@@ -12,7 +11,7 @@ import {
   Post,
 } from '@/components/pages';
 
-import './App.scss';
+import '@/shared/styles/App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -20,12 +19,17 @@ import { auth } from '../../services/firebase';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 
-import { userContext } from '../Contexts/Contexts';
 
 import { useTranslation } from 'react-i18next';
 
+import { useSelector, useDispatch} from "react-redux";
+import { changeEmail} from "@/store";
+
 function App() {
   const [user, loading, error] = useAuthState(auth);
+
+
+
 
   const { i18n } = useTranslation();
 
@@ -46,7 +50,6 @@ function App() {
     );
   } else {
     return (
-      <userContext.Provider value={user}>
         <Router>
           <Routes>
             <Route path="/" element={<MainPage />} />
@@ -61,7 +64,6 @@ function App() {
             <Route path="*" element={<Page404 />} />
           </Routes>
         </Router>
-      </userContext.Provider>
     );
   }
 }

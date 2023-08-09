@@ -6,7 +6,7 @@ const getAllUsersAPI = async (email) => {
     return response;
 }
 
-const postRegistraionAPI = async (email, username) => {
+const userRegistraionAPI = async (email, username) => {
     await axios.post(`${_apiBase}/users/registration`, {email, username })
 }
 
@@ -15,4 +15,4 @@ const getUserAPI = async (id) => {
     return response
 } 
 
-export {getAllUsersAPI, postRegistraionAPI, getUserAPI}
+export {getAllUsersAPI, userRegistraionAPI, getUserAPI}

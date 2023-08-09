@@ -1,9 +1,5 @@
-import { NavBar } from '@/components/Nav';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { userContext  } from '../Contexts/Contexts';
-import { useContext } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -40,9 +36,9 @@ import { getAllCommentsAPI, postAddCommentAPI, deleteCommentAPI } from '../../se
 import { getLikesOnPostAPI } from '../../services/Likes';
 import { getRatingAPI } from '../../services/Rating';
 import { useTranslation } from 'react-i18next';
+import { Layout } from '../Layout/main';
 
 export const Post = () => {
-  const context = useContext(userContext);
   const { t } = useTranslation();
 
   let { postId } = useParams();
@@ -75,44 +71,44 @@ export const Post = () => {
         like: like,
       });
     });
-    if (context != null) {
-      getRatingAPI(context.email, postId).then((res) => {
-        setUserRating(res.data[0].Rating);
-      });
-    }
+    // if (context != null) {
+    //   getRatingAPI(context.email, postId).then((res) => {
+    //     setUserRating(res.data[0].Rating);
+    //   });
+    // }
 
     const comments = getAllCommentsAPI(postId).then((res) => res);
     setComments(comments.data);
-  }, [userRating, context]);
+  }, [userRating]);
 
   const likePost = async () => {
-    const count = await getLikesOnPostAPI(postObject.id, context.email);
-    if (likes.like == true) {
-      setLikes({
-        count: count.data.count,
-        like: false,
-      });
-    } else {
-      setLikes({
-        count: count.data.count,
-        like: true,
-      });
-    }
+    // const count = await getLikesOnPostAPI(postObject.id, context.email);
+    // if (likes.like == true) {
+    //   setLikes({
+    //     count: count.data.count,
+    //     like: false,
+    //   });
+    // } else {
+    //   setLikes({
+    //     count: count.data.count,
+    //     like: true,
+    //   });
+    // }
   };
 
   const addComment = () => {
-    postAddCommentAPI(newComment, postId, context.email).then((responce) => {
-      if (responce.data.error) {
-      } else {
-        const commentToAdd = {
-          commentBody: newComment,
-          username: context.displayName,
-          email: context.email,
-        };
-        setComments([...comments, commentToAdd]);
-        setNewComment('');
-      }
-    });
+    // postAddCommentAPI(newComment, postId, context.email).then((responce) => {
+    //   if (responce.data.error) {
+    //   } else {
+    //     const commentToAdd = {
+    //       commentBody: newComment,
+    //       username: context.displayName,
+    //       email: context.email,
+    //     };
+    //     setComments([...comments, commentToAdd]);
+    //     setNewComment('');
+    //   }
+    // });
   };
 
   const deleteComment = (id) => {
@@ -143,11 +139,11 @@ export const Post = () => {
               <div className="comment" key={key}>
                 {comment.commentBody}
                 <label>Username: {comment.username}</label>
-                {context.email === comment.email ? (
+                {/* {context.email === comment.email ? (
                   <button onClick={() => deleteComment(comment.id)}>X</button>
                 ) : (
                   ''
-                )}
+                )} */}
               </div>
             );
           })}
@@ -157,8 +153,7 @@ export const Post = () => {
   };
 
   return (
-    <>
-      <NavBar />
+    <Layout>
       <div style={{ padding: '5% 5% 0 5%' }}>
         {!Object.keys(postObject).length !== true ? (
           <Container>
@@ -212,7 +207,7 @@ export const Post = () => {
                   <Tabs defaultActiveKey="Likes" id="uncontrolled-tab-example" className="mb-3">
                     <Tab eventKey="Likes" title="Likes" aria-selected>
                       <Row>
-                        {context != null ? (
+                        {/* {context != null ? (
                           <Col style={{ fontWeight: 'bold', fontSize: '20px' }}>
                             Click me!
                             <ThumbUpAltIcon
@@ -220,7 +215,7 @@ export const Post = () => {
                               onClick={likePost}
                             />
                           </Col>
-                        ) : null}
+                        ) : null} */}
                         <Col>
                           <p style={{ fontWeight: 'bold', fontSize: '20px' }}>
                             Total: {likes.count} likes{' '}
@@ -231,7 +226,7 @@ export const Post = () => {
 
                     <Tab eventKey="Rating" title="Rating">
                       <Row style={{ fontWeight: 'bold', fontSize: '20px' }} xs={1} lg={3}>
-                        {context != null ? (
+                        {/* {context != null ? (
                           <Col>
                             <Row>Your Rating!</Row>
                             <Row>
@@ -242,7 +237,7 @@ export const Post = () => {
                               />
                             </Row>
                           </Col>
-                        ) : null}
+                        ) : null} */}
                         <Col>
                           <Row>User's Rating!</Row>
                           <Row>
@@ -285,7 +280,7 @@ export const Post = () => {
           </Container>
         ) : null}
       </div>
-    </>
+    </Layout>
   );
 };
 

@@ -1,5 +1,4 @@
-import { userContext } from '../Contexts/Contexts';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Utils
 import { ownerRating, totalRating } from '../utils/Functions';
@@ -17,9 +16,9 @@ import { getAllUsersAPI } from '../../services/Users';
 
 
 import { useTranslation } from 'react-i18next';
+import { Layout } from '@/components/Layout/main';
 
 export const AdminPage = () => {
-  const context = useContext(userContext);
 
   const { t, i18n } = useTranslation();
 
@@ -28,25 +27,25 @@ export const AdminPage = () => {
   const [admin, setAdmin] = useState(false);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    if (!context) navigate(-1);
-  }, [context]);
+  // useEffect(() => {
+  //   if (!context) navigate(-1);
+  // }, [context]);
 
   const verifyAdmin = async () => {
-    const isAdmin = await getIsUserAdminAPI(context.email).then((responce) => {
-      if (responce.data.userType === 'admin') {
-        return true;
-      }
-      return false;
-    });
+    // const isAdmin = await getIsUserAdminAPI(context.email).then((responce) => {
+    //   if (responce.data.userType === 'admin') {
+    //     return true;
+    //   }
+    //   return false;
+    // });
 
-    setAdmin(isAdmin);
-    getAllUsers();
+    // setAdmin(isAdmin);
+    // getAllUsers();
   };
 
   const getAllUsers = async () => {
-    const response = await getAllUsersAPI(context.email);
-    setData(response.data);
+    // const response = await getAllUsersAPI(context.email);
+    // setData(response.data);
   };
 
   const AdminTable = () => {
@@ -140,8 +139,7 @@ export const AdminPage = () => {
   };
 
   return (
-    <>
-      <NavBar />
+    <Layout>
       <div style={{ padding: '5% 5% 0 5%' }}>
         <Row className="justify-content-md-center">
           {!admin && (
@@ -156,6 +154,6 @@ export const AdminPage = () => {
           <Container>{admin && AdminTable()}</Container>
         </Row>
       </div>
-    </>
+    </Layout>
   );
 };

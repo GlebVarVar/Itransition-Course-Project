@@ -1,16 +1,23 @@
 import axios from "axios";
 import { _apiBase } from ".";
 
-const getAllUsersAPI = async (email) => {
+const getAllUsersAPI = async (email: string) => {
     const response = await axios.get(`${_apiBase}/users/`, {headers: {email: email}});
     return response;
 }
 
-const userRegistraionAPI = async (email, username) => {
-    await axios.post(`${_apiBase}/users/registration`, {email, username })
+
+interface User {
+    username: string;
+    email: string;
+    password: string;
 }
 
-const getUserAPI = async (id) => {
+const userRegistraionAPI = async (user: User) => {
+    await axios.post(`${_apiBase}/users/registration`, { user })
+}
+
+const getUserAPI = async (id: number) => {
     const response = await axios.get(`${_apiBase}/users/${id}`);
     return response
 } 

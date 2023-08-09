@@ -1,18 +1,16 @@
 import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-
 import { Link } from 'react-router-dom';
 
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-
-import { getIsUserAdminAPI } from '../../services/Admin';
+import { getIsUserAdminAPI } from '../../../../services/Admin';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { toggleTheme, toggleLanguage } from '@/store/slices';
+import { toggleTheme } from '@/store/slices';
 
 import { useTranslation } from 'react-i18next'; // переводы
 
@@ -21,7 +19,6 @@ export const NavBar = () => {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
-
 
   const [id, setId] = useState('');
 
@@ -92,9 +89,9 @@ export const NavBar = () => {
             onClick={(e) => {
               goTo(e, `/profile/${id}`);
             }}>
-            {context?.email}
+            {/* {context?.email} */}
           </Nav.Link>
-          {context ? (
+          {/* {context ? (
             <Button
               variant="outline-danger"
               onClick={(e) => {
@@ -106,7 +103,7 @@ export const NavBar = () => {
             <Button variant="outline-success" onClick={(e) => goTo(e, '/login')}>
               {t('login')}
             </Button>
-          )}
+          )} */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

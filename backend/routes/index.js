@@ -6,5 +6,15 @@ const likesRouter = require('./Likes');
 const tagsRouter = require('./Tags');
 const ratingRouter = require('./Rating');
 
+const authRouter = require('./authRouter');
 
-module.exports = {postRouter, commentsRouter, usersRouter, photosRouter, likesRouter, tagsRouter, ratingRouter}
+module.exports = {
+  authRouter,
+  postRouter,
+  commentsRouter,
+  usersRouter,
+  photosRouter,
+  likesRouter,
+  tagsRouter,
+  ratingRouter,
+};

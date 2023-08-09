@@ -1,12 +1,9 @@
-import { useState, useEffect, useContext, FC } from 'react';
-import { userContext } from '../Contexts/Contexts';
+import { useState, FC } from 'react';
 import { auth, login, googleLogin } from '../../services/firebase';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { NavBar } from '@/components/Nav';
-
-import './Style/Login.scss';
+import { Layout } from '../Layout/main';
 
 import { useTranslation } from 'react-i18next';
 
@@ -20,14 +17,13 @@ export const Login: FC = () => {
 
   const navigate = useNavigate();
 
-  const context = useContext(userContext);
 
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (context) navigate(-1);
-    return;
-  }, [context]);
+  // useEffect(() => {
+  //   if (context) navigate(-1);
+  //   return;
+  // }, [context]);
 
   const loginFirebase = async () => {
     const responce = await login(auth, loginEmail, loginPassword);
@@ -77,8 +73,7 @@ export const Login: FC = () => {
   };
 
   return (
-    <>
-      <NavBar />
+    <Layout>
       <div className="d-flex align-items-center justify-content-center" style={{ height: '500px' }}>
         <Form className="rounded p-4 p-sm-3">
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -129,6 +124,6 @@ export const Login: FC = () => {
           </Form.Group>
         </Form>
       </div>
-    </>
+    </Layout>
   );
 };

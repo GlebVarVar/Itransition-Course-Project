@@ -1,6 +1,5 @@
-import { userContext  } from '../Contexts/Contexts';
 import { useNavigate, Link } from 'react-router-dom';
-import { useContext, useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from 'react';
 // Utis
 import { ownerRating, totalRating } from '../utils/Functions';
 // Components
@@ -16,16 +15,15 @@ import {
   DropdownButton,
   Dropdown,
 } from 'react-bootstrap';
-import { NavBar } from '@/components/Nav';
 import ReactMarkdown from 'react-markdown';
 import { StarRating, StarRatingStatic } from '../Stars/Stars';
 
 // API
 import { getPostsAPI } from '../../services/Posts';
 import { useTranslation } from 'react-i18next';
+import { Layout } from '../Layout/main';
 
 export const MainPage: FC = () => {
-  const context = useContext(userContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -48,8 +46,7 @@ export const MainPage: FC = () => {
   }, [filter, countOfDisplay]);
 
   return (
-    <>
-      <NavBar />
+    <Layout>
       <div style={{ padding: '5% 0 0 0' }}>
         <Container>
           <Row style={{ margin: '2% 0' }}>
@@ -221,6 +218,6 @@ export const MainPage: FC = () => {
           </Row>
         </Container>
       </div>
-    </>
+    </Layout>
   );
 };

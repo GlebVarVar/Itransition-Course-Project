@@ -1,6 +1,5 @@
-import { useState, useContext, FC } from 'react';
+import { useState, FC } from 'react';
 import clsx from 'clsx';
-import { userContext } from '../Contexts/Contexts';
 
 import { postRatingAPI } from '../../services/Rating';
 
@@ -11,7 +10,6 @@ interface StarRatingProps {
 
 export const StarRating: FC<StarRatingProps> = ({ userRating, setUserRating }) => {
   const [hover, setHover] = useState(0);
-  const context = useContext(userContext);
   const addRanting = (postId, email, count) => {
     postRatingAPI(postId, email, count);
   };
@@ -28,7 +26,7 @@ export const StarRating: FC<StarRatingProps> = ({ userRating, setUserRating }) =
             onClick={(e) => {
               e.preventDefault();
               setUserRating(index);
-              addRanting(props.postId, context.email, index);
+              // addRanting(props.postId, context.email, index);
             }}
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(userRating)}>

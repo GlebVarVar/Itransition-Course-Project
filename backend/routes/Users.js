@@ -6,17 +6,6 @@ const {findUserIn} = require('../middleware/auth')
 // const { validateToken } = require("../middlewares/AuthMiddleware");
 // const { sign } = require("jsonwebtoken");
 
-router.post("/registration", findUserIn, async (req, res) => {
-  const { email, username } = req.body;
-
-  await Users.create({
-    username: username,
-    email: email,
-    userType: 'member'
-  });
-  res.json("SUCCESS");
-});
-
 // router.post("/login", async (req, res) => {
 //   const { username, password } = req.body;
 

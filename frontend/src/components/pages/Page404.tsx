@@ -1,11 +1,10 @@
-import { NavBar } from '@/components/Nav/NavBar';
 import { FC } from 'react';
+import { Layout } from '../Layout/main';
 
 export const Page404: FC = () => {
   return (
-    <div>
-      <NavBar />
+    <Layout>
       Page not found
-    </div>
+    </Layout>
   );
 };

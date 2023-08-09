@@ -1,5 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
-import { userContext } from '../Contexts/Contexts';
+import { useEffect, useState  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -23,22 +22,17 @@ import {
   ButtonGroup,
   Button,
 } from 'react-bootstrap';
-import { NavBar } from '@/components/Nav';
-import { Image } from 'cloudinary-react';
+// import { Image } from 'cloudinary-react';
 
-
+import { Layout } from '../Layout/main';
 
 
 import { useTranslation } from 'react-i18next';
 
 import { postCreatePostAPI } from '../../services/Posts';
 
-import './Style/DragAndDrop.scss';
-import './CreatePost.scss';
-
 export const CreatePost = () => {
   const navigate = useNavigate();
-  const context = useContext(userContext);
 
   const { t, i18n } = useTranslation();
 
@@ -77,13 +71,13 @@ export const CreatePost = () => {
     );
   };
 
-  useEffect(() => {
-    if (!context) navigate(-1);
+  // useEffect(() => {
+  //   if (!context) navigate(-1);
 
-    getAllTags();
+  //   getAllTags();
 
-    return;
-  }, [context]);
+  //   return;
+  // }, [context]);
 
   const createPost = async (e) => {
     e.preventDefault();
@@ -97,7 +91,7 @@ export const CreatePost = () => {
     } else if (Rating == '') {
       setErrorCreate({ error: true, errorMessage: 'Please enter rating' });
     } else {
-      const email = context.email;
+      // const email = context.email;
 
       functionsAfterSubmit(email);
     }
@@ -182,9 +176,7 @@ export const CreatePost = () => {
   };
 
   return (
-    <>
-      <NavBar />
-      <div style={{ padding: '5% 5% 0 5%' }}>
+    <Layout>
         <Row>
           <Col md={6} className="mb-2">
             <Toast
@@ -335,7 +327,6 @@ export const CreatePost = () => {
             </Col>
           </Row>
         </Container>
-      </div>
-    </>
+    </Layout>
   );
 };

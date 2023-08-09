@@ -11,3 +11,10 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
     ports:
       - "${DATABASE_PORT}:3306"
+
+  # backend:
+  #   image: node
+  #   container_name: ${PROJECT}_backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${BACKEND_PORT}:3000"

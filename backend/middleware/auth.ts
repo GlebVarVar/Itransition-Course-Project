@@ -1,4 +1,4 @@
-const { Users } = require('../models');
+import { Users } from "../config";
 
 const findUser = async (req, res, next) => {
   const userId = await Users.findAll({

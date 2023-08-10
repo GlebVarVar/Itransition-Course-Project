@@ -6,7 +6,7 @@ const app: Express = express();
 dotenv.config();
 const port = process.env.PORT || 3001;
 
-const {
+import {
   postRouter,
   commentsRouter,
   usersRouter,
@@ -15,8 +15,8 @@ const {
   tagsRouter,
   ratingRouter,
   authRouter,
-} = require('./routes/index');
-const authController = require('./routes/authController');
+} from './routes/index';
+import { authController } from "./routes/authController";
 
 app.use(express.json());
 app.use(cors());

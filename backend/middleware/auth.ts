@@ -1,4 +1,4 @@
-import { Users } from "../config";
+import { Users } from "../models";
 
 const findUser = async (req, res, next) => {
   const userId = await Users.findAll({
@@ -34,4 +34,4 @@ const findUserHeaders = async (req, res, next) => {
   next();
 };
 
-module.exports = { findUser, findUserIn, findUserHeaders };
+export { findUser, findUserIn, findUserHeaders };

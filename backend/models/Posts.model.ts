@@ -1,45 +1,42 @@
-module.exports = (sequelize, DataTypes) => {
+import { Table, Column, Model, HasMany, ForeignKey } from "sequelize-typescript";
+import { Tags, Comments, Likes, Ratings, Photos, Users } from "./";
+@Table({
+  tableName: "posts",
+})
+export default class Posts extends Model {
+  @Column
+  title!: string;
 
-    const Posts = sequelize.define("Posts", {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        postText: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        category: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+  @Column
+  postText!: string;
 
-    Posts.associate = (models) => {
-        Posts.hasMany(models.Comments, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Likes, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Tags, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Ratings, {
-            onDelete: "cascade",
-        });
-        Posts.hasMany(models.Photos, {
-            onDelete: "cascade",
-        });
-    }
+  @Column
+  username!: string;
 
-    return Posts;
+  @Column
+  email!: string;
+
+  @Column
+  category!: string;
+
+  @ForeignKey(() => Users)
+  @Column({
+    field: "user_id"
+  })
+  userId: number;
+
+  @HasMany(() => Likes)
+  likes: Likes[];
+
+  @HasMany(() => Ratings)
+  rating: Ratings[];
+
+  @HasMany(() => Comments)
+  comments: Comments[];
+
+  @HasMany(() => Photos)
+  photos: Photos[];
+
+  @HasMany(() => Tags)
+  tags: Tags[];
 }

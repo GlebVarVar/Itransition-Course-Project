@@ -1,10 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const { Users, Posts, Likes, Ratings } = require("../models");
-const {findUserIn} = require('../middleware/auth')
-// const bcrypt = require("bcryptjs");
-// const { validateToken } = require("../middlewares/AuthMiddleware");
-// const { sign } = require("jsonwebtoken");
+import express from "express";
+const usersRouter = express.Router();
+import { Users, Posts, Likes, Ratings } from "../models";
+import { findUserIn } from "../middleware/auth";
+// const bcrypt = import("bcryptjs");
+// const { validateToken } = import("../middlewares/AuthMiddleware");
+// const { sign } = import("jsonwebtoken");
 
 // router.post("/login", async (req, res) => {
 //   const { username, password } = req.body;
@@ -38,22 +38,24 @@ const {findUserIn} = require('../middleware/auth')
 //   res.json(basicInfo);
 // });
 
-router.get("/admin", async (req, res) => {
+usersRouter.get("/admin", async (req, res) => {
   const email = req.header("email");
   const basicInfo = await Users.findOne({ where: { email: email } });
   res.json(basicInfo);
 });
 
-
-router.get("/", async (req, res) => {
-  const basicInfo = await Users.findAll({  include: [{model: Posts, include: [Likes, Ratings]}]});
+usersRouter.get("/", async (req, res) => {
+  const basicInfo = await Users.findAll({ include: [{ model: Posts, include: [Likes, Ratings] }] });
   console.log(basicInfo);
   res.json(basicInfo);
 });
 
-router.get("/:id", async (req, res) => {
+usersRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
-  const basicInfo = await Users.findOne({ where: { id: id }, include: [{model: Posts, include: [Likes, Ratings]}] });
+  const basicInfo = await Users.findOne({
+    where: { id: id },
+    include: [{ model: Posts, include: [Likes, Ratings] }],
+  });
   res.json(basicInfo);
 });
 
@@ -74,13 +76,10 @@ router.get("/:id", async (req, res) => {
 //   });
 // });
 
-
-router.put("/admin/:email", async (req, res) => {
+usersRouter.put("/admin/:email", async (req, res) => {
   const email = req.params.email;
-  await Users.update({userType: 'admin'}, {where: {email: email}})
+  await Users.update({ userType: "admin" }, { where: { email: email } });
   res.json("ADMIN ADDED SUCCESSFULLY");
 });
 
-
-
-module.exports = router;
+export { usersRouter };

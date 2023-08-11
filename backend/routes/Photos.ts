@@ -1,20 +1,19 @@
-const {Photos} = require("../models")
-const express = require('express')
-const router = express.Router()
+import { Photos } from "../models";
+import express from "express";
+const photosRouter = express.Router();
 
+photosRouter.post("/", async (req, res) => {
+  const { mas, PostId } = req.body;
+  console.log(req.body);
 
-router.post("/",  async (req, res) => {
-    const {mas, PostId} = req.body;
-    console.log(req.body)
-     
-    if (mas.length !==0 ) {
-        console.log(mas);
-        mas.forEach(async (Photo)  => {
-            await Photos.create({Photo, PostId});
-        })
-    }
-    
-    res.json('success');
+  if (mas.length !== 0) {
+    console.log(mas);
+    mas.forEach(async (Photo) => {
+      await Photos.create({ Photo, PostId });
+    });
+  }
+
+  res.json("success");
 });
 
-module.exports = router;
+export { photosRouter };

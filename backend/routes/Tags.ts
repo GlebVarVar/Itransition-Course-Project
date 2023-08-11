@@ -1,26 +1,24 @@
-const {Alltags, Tags} = require("../models")
-const express = require('express')
-const router = express.Router()
+import { Alltags, Tags } from "../models";
+import express from "express";
+const tagsRouter = express.Router();
 
-
-router.get("/all",  async (req, res) => {
-    const listOftags = await Alltags.findAll();
-    res.json(listOftags);
-    
+tagsRouter.get("/all", async (req, res) => {
+  const listOftags = await Alltags.findAll();
+  res.json(listOftags);
 });
 
-router.post("/all",  async (req, res) => {
-    const {tag} = req.body;
-    await Alltags.create({tag: tag});
-    res.json('success');
+tagsRouter.post("/all", async (req, res) => {
+  const { tag } = req.body;
+  await Alltags.create({ tag: tag });
+  res.json("success");
 });
 
-router.post("/",  async (req, res) => {
-    const {tags, PostId} = req.body;
-    tags.forEach(async (tag)  => {
-        await Tags.create({tag, PostId});
-    })
-    res.json('success');
+tagsRouter.post("/", async (req, res) => {
+  const { tags, PostId } = req.body;
+  tags.forEach(async (tag) => {
+    await Tags.create({ tag, PostId });
+  });
+  res.json("success");
 });
 
 // router.post("/", async (req, res) => {
@@ -35,7 +33,7 @@ router.post("/",  async (req, res) => {
 //         await Likes.destroy({ where: { PostId: PostId, UserId: UserId } });
 //         res.json({liked: false});
 //     }
-    
+
 // });
 
-module.exports = router;
+export { tagsRouter };

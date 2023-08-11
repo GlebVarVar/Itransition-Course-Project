@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const { secret } = require('./config');
-const { Users, Posts, Likes, Ratings } = require('../models');
-const bcrypt = require('bcryptjs');
+import jwt from 'jsonwebtoken';
+import secret  from './config';
+import { Users, Posts, Likes, Ratings } from '../models';
+import bcrypt from 'bcryptjs';
 
 const generateAccessToken = (id, roles) => {
   const payload = {
@@ -46,4 +46,4 @@ class authController {
   }
 }
 
-module.exports = new authController();
+export default new authController();

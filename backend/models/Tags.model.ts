@@ -1,11 +1,16 @@
-module.exports = (sequelize, DataTypes) => {
+import { Table, Column, Model, ForeignKey } from "sequelize-typescript";
+import Posts from "./Posts.model";
 
-    const Tags = sequelize.define("Tags", {
-        tag: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+@Table({
+  tableName: "tags",
+})
+export default class Tags extends Model {
+  @Column
+  tag!: string;
 
-    return Tags;
+  @ForeignKey(() => Posts)
+  @Column({
+    field: "post_id"
+  })
+  postId: number;
 }

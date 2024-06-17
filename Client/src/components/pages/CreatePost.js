@@ -40,7 +40,7 @@ const CreatePost = () => {
   const [PhotosToUpload, setPhotosToUpload] = useState([]); // photos to upload
 
   const [photos, setPhotos] = useState([{
-    profileIng: 'https://crankwheel.com/uploads/2019/06/12/CW_How%20to%20deliver%20the%20perfect%20instant%20online%20product%20demo.jpg'
+    profileIng: 'https://ae04.alicdn.com/kf/A60fe96f1cfc949348e2a167efaa30344h.jpeg'
   }]); // photos to display
 
   const [ImageLinks, setImageLinks] = useState([]); // image links for db

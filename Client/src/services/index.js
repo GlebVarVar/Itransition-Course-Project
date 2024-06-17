@@ -1,3 +1,3 @@
-const _apiBase = 'https://course-project-itransitions.herokuapp.com/api'; 
+const _apiBase = 'http://localhost:3001/api'; 
 
 export {_apiBase}

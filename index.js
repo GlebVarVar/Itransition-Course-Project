@@ -7,7 +7,7 @@ const {postRouter, commentsRouter, usersRouter, photosRouter, likesRouter, tagsR
 require("dotenv").config();
 
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'https://itransition-course-project-unul.vercel.app', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }

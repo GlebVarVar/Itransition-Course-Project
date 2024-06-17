@@ -6,14 +6,9 @@ const {postRouter, commentsRouter, usersRouter, photosRouter, likesRouter, tagsR
 
 require("dotenv").config();
 
-const corsOptions ={
-    origin:'https://itransition-course-project-65lw-bce4tqa3d.vercel.app/', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
 
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 
 const db = require('./models');
 

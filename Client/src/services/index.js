@@ -1,3 +1,3 @@
-const _apiBase = 'http://localhost:3001/api'; 
+const _apiBase = 'https://itransition-course-project-unul.vercel.app/api'; 
 
 export {_apiBase}

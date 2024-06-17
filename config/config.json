@@ -8,17 +8,19 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "sql11480316",
-    "password": "jVw6NHW8DA",
-    "database": "sql11480316",
-    "host": "sql11.freesqldatabase.com",
+    "username": "itransition_balancedug",
+    "password": "1234",
+    "database": "itransition_balancedug",
+    "host": "76w.h.filess.io",
+    "port": "3307",
     "dialect": "mysql"
   },
   "production": {
-    "username": "sql11480316",
-    "password": "jVw6NHW8DA",
-    "database": "sql11480316",
-    "host": "sql11.freesqldatabase.com",
+    "username": "itransition_balancedug",
+    "password": "1234",
+    "database": "itransition_balancedug",
+    "host": "76w.h.filess.io",
+    "port": "3307",
     "dialect": "mysql"
   }
 }
